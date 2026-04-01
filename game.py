@@ -1,7 +1,7 @@
 import pygame
 from sys import exit
 
-from player import Player
+from classes.actors.player import Player
 from classes.actors.bomb import Bomb
 from classes.actors.venemy import VEnemy
 from classes.actors.henemy import HEnemy

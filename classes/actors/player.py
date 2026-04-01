@@ -1,7 +1,7 @@
 import pygame
 import os.path
 
-BASE_DIR = os.path.dirname(__file__)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 ANIMS_FOLDER = 'assets/graphics/sprites/player'
 
 COLLISION_FLAGS = {
