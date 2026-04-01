@@ -1,6 +1,6 @@
 import pygame
+from classes.game_environment.tilemap import Tilemap
 from sys import exit
-
 from classes.actors.player import Player
 from classes.actors.bomb import Bomb
 from classes.actors.venemy import VEnemy
@@ -207,6 +207,8 @@ def flash_player():
             return
     player_group.draw(screen)
 
+map_surface = Tilemap.create_tilemap_surface(TILEMAP, TILE_SIZE, tiles)
+
 while True:
 
     for event in pygame.event.get():
@@ -217,13 +219,13 @@ while True:
     game_lives_c_txt = pixel_font.render(f'X{player.lives}', False, 'White')
     game_score_txt = pixel_font.render(f'PUNTUACIÓN: {SCORE}', False, 'White')
     screen.blit(paris_bgrnd, (0, 0))
+    screen.blit(map_surface, (offset_x, offset_y))
     screen.blit(top_menu_surface, top_menu_rect)
     screen.blit(game_title_txt, game_title_rect)
     screen.blit(game_level_txt, game_level_txt_rect)
     screen.blit(game_lives_c_txt, game_lives_c_txt_rect)
     screen.blit(thomas_lives_icon, thomas_lives_icon_rect)
     screen.blit(game_score_txt, game_score_txt_rect)
-    draw_map(screen, TILEMAP, tiles, offset_x, offset_y)
     check_tile_collision(player, rects_map)
     BOMB_COUNTER = bomb_spawning(BOMB_COUNTER)
     player_group.update()
