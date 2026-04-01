@@ -140,7 +140,8 @@ thomas_lives_icon_rect = thomas_lives_icon.get_rect(center=(top_menu_rect.left +
 game_score_txt = pixel_font.render(f'PUNTUACIÓN: {SCORE}', False, 'White')
 game_score_txt_rect = game_score_txt.get_rect(center=(top_menu_rect.left + 100, top_menu_rect.centery + 13))
 
-rects_map = create_tile_rects(TILEMAP, [1, 2], offset_x, offset_y)
+# rects_map = create_tile_rects(TILEMAP, [1, 2], offset_x, offset_y)\
+rects_map = Tilemap.create_rects_map(TILEMAP, [1, 2], TILE_SIZE, offset_x, offset_y)
 enemies_group.add(VEnemy(365,200, rects_map))
 enemies_group.add(VEnemy(447,581, rects_map))
 enemies_group.add(VEnemy(281,297, rects_map))
@@ -229,7 +230,8 @@ while True:
     bomb_group.update()
     explosion_group.update()
     explosion_group.draw(screen)
-    rects_map = create_tile_rects(TILEMAP, [1, 2], offset_x, offset_y)
+    # rects_map = create_tile_rects(TILEMAP, [1, 2], offset_x, offset_y)
+    rects_map = Tilemap.create_rects_map(TILEMAP, [1, 2], TILE_SIZE, offset_x, offset_y)
     enemies_group.draw(screen)
     enemies_group.update(rects_map)
     flash_player()
