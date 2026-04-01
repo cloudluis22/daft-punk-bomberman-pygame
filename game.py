@@ -154,10 +154,6 @@ enemies_group.add(HEnemy(197,253, rects_map))
 enemies_group.add(HEnemy(448,170, rects_map))
 enemies_group.add(HEnemy(531,590, rects_map))
 
-def print_mouse_coordinates():
-    x, y = pygame.mouse.get_pos()
-    print(x, y)
-
 def check_tile_collision(player, rects_map):
 
     # --- X movement ---

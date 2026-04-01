@@ -22,6 +22,22 @@ class Tilemap():
                     posY = row_index * tile_size
                     map_surface.blit(tile_img, (posX, posY))
 
-        return map_surface.convert_alpha()
+        return map_surface.convert_alpha()  
 
-            
+    @staticmethod
+    def create_rects_map(tilemap, collision_rects, tile_size, offset_x, offset_y):
+        rects = []
+
+        for row_index, row in enumerate(tilemap):
+            for col_index, tile  in enumerate(row):
+                if tile in collision_rects:
+                    rect = pg.Rect(
+                       offset_x + col_index * tile_size,
+                       offset_y + row_index * tile_size,
+                       tile_size,
+                       tile_size 
+                    )
+
+                    rects.append((rect, tile))
+        
+        return rects
