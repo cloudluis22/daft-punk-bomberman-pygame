@@ -2,9 +2,9 @@ import pygame
 from sys import exit
 
 from player import Player
-from bomb import Bomb
-from venemy import VEnemy
-from henemy import HEnemy
+from classes.actors.bomb import Bomb
+from classes.actors.venemy import VEnemy
+from classes.actors.henemy import HEnemy
 
 # VARIABLES IMPORTANTES
 SCREEN_WIDTH = 900

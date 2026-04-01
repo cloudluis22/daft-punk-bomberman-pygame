@@ -1,5 +1,5 @@
 import pygame
-from explosion import Explosion
+from classes.actors.explosion import Explosion
 
 def get_explosion_tiles(tilemap, bomb_x, bomb_y, radius=1):
 
