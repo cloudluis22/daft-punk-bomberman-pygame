@@ -82,5 +82,4 @@ class Bomb(pygame.sprite.Sprite):
 
             if self.tilemap[y][x] == 2:
                 self.tilemap[y][x] = 0
-            
-            self.update_tm()
+                self.update_tm(x, y)

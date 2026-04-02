@@ -41,3 +41,17 @@ class Tilemap():
                     rects.append((rect, tile))
         
         return rects
+    
+    @staticmethod
+    def update_map_surface(surface, x, y, replacement_tile, tiles_dict, tile_size):
+        tile_img = get_tile_image(replacement_tile, tiles_dict)
+        posX = x * tile_size
+        posY = y * tile_size
+        surface.blit(tile_img, (posX, posY))
+
+    @staticmethod
+    def update_rects_map(rects_map, x, y, offset_x, offset_y, tile_size):
+        px = offset_x + x * tile_size + tile_size // 2
+        py = offset_y + y * tile_size + tile_size // 2
+        return list(filter(lambda rect: rect[0].center != (px, py), rects_map))
+

@@ -135,12 +135,12 @@ def check_tile_collision(player, rects_map):
             if player.vy < 0:
                 player.rect.top = rect.bottom
  
-def update_tilemap():
+def update_tilemap(x, y):
     global rects_map
     global map_surface
 
-    rects_map = Tilemap.create_rects_map(LVL1_TM, [1, 2], TILE_SIZE, offset_x, offset_y)
-    map_surface = Tilemap.create_tilemap_surface(LVL1_TM, TILE_SIZE, TILES_LV1)
+    rects_map = Tilemap.update_rects_map(rects_map, x, y, offset_x, offset_y, TILE_SIZE)
+    Tilemap.update_map_surface(map_surface, x, y, 0, TILES_LV1, TILE_SIZE)
 
 def bomb_spawning(bomb_counter):
 
