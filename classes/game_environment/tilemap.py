@@ -1,7 +1,7 @@
 import pygame as pg
 
 def get_tile_image(tile_type, tiles_dict):
-    return pg.image.load(tiles_dict[tile_type]).convert()
+    return tiles_dict[tile_type]
 
 class Tilemap():
     

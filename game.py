@@ -53,6 +53,8 @@ pygame.draw.rect(
     (0, 0, 830, 75),        
 )
 
+TILES_LV1 = {k: pygame.image.load(v).convert() for k, v in constants.TILES_LVL1.items()}
+
 top_menu_rect = top_menu_surface.get_rect(center=(450, 50))
 
 game_title_txt = pixel_font_lg.render('Daft Punk Bomberman', False, 'White')
@@ -93,7 +95,6 @@ thomas_lives_icon_rect = thomas_lives_icon.get_rect(center=(top_menu_rect.left +
 game_score_txt = pixel_font.render(f'PUNTUACIÓN: {SCORE}', False, 'White')
 game_score_txt_rect = game_score_txt.get_rect(center=(top_menu_rect.left + 100, top_menu_rect.centery + 13))
 
-# rects_map = create_tile_rects(TILEMAP, [1, 2], offset_x, offset_y)\
 rects_map = Tilemap.create_rects_map(LVL1_TM, [1, 2], TILE_SIZE, offset_x, offset_y)
 enemies_group.add(VEnemy(365,200, rects_map))
 enemies_group.add(VEnemy(447,581, rects_map))
@@ -134,6 +135,13 @@ def check_tile_collision(player, rects_map):
             if player.vy < 0:
                 player.rect.top = rect.bottom
  
+def update_tilemap():
+    global rects_map
+    global map_surface
+
+    rects_map = Tilemap.create_rects_map(LVL1_TM, [1, 2], TILE_SIZE, offset_x, offset_y)
+    map_surface = Tilemap.create_tilemap_surface(LVL1_TM, TILE_SIZE, TILES_LV1)
+
 def bomb_spawning(bomb_counter):
 
     if bomb_counter < 2:
@@ -146,7 +154,7 @@ def bomb_spawning(bomb_counter):
             x = offset_x + tile_x * TILE_SIZE + TILE_SIZE // 2
             y = offset_y + tile_y * TILE_SIZE + TILE_SIZE // 2
 
-            bomb = Bomb(x, y, tile_x, tile_y, LVL1_TM, offset_x, offset_y, TILE_SIZE, explosion_group)
+            bomb = Bomb(x, y, tile_x, tile_y, LVL1_TM, offset_x, offset_y, TILE_SIZE, explosion_group, update_tilemap)
             bomb_group.add(bomb)
             bomb_counter += 1
     return bomb_counter
@@ -157,7 +165,7 @@ def flash_player():
             return
     player_group.draw(screen)
 
-map_surface = Tilemap.create_tilemap_surface(LVL1_TM, TILE_SIZE, constants.TILES_LVL1)
+map_surface = Tilemap.create_tilemap_surface(LVL1_TM, TILE_SIZE, TILES_LV1)
 
 while True:
 
@@ -183,7 +191,6 @@ while True:
     bomb_group.update()
     explosion_group.update()
     explosion_group.draw(screen)
-    rects_map = Tilemap.create_rects_map(LVL1_TM, [1, 2], TILE_SIZE, offset_x, offset_y)
     enemies_group.draw(screen)
     enemies_group.update(rects_map)
     flash_player()
