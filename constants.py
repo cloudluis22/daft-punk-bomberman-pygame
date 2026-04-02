@@ -44,8 +44,8 @@ TM_LVL1 = [
 ################################################################################
 
 TILES_LVL1 = {
-    0: pg.image.load('assets/graphics/tiles/concrete_floor.png').convert(),
-    1: pg.image.load('assets/graphics/tiles/concrete_wall.png').convert(),
-    2: pg.image.load('assets/graphics/tiles/crate.png').convert(),
-    3: pg.image.load('assets/graphics/tiles/spawn.png').convert()    
+    0: 'assets/graphics/tiles/concrete_floor.png',
+    1: 'assets/graphics/tiles/concrete_wall.png',
+    2: 'assets/graphics/tiles/crate.png',
+    3: 'assets/graphics/tiles/spawn.png'    
 }
