@@ -56,6 +56,32 @@ def player_input(self):
         pygame.K_w, pygame.K_a, pygame.K_s, pygame.K_d,
         pygame.K_UP, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_DOWN)):
         self.moving = False
+
+def check_tile_collision(self):
+
+    # --- X movement ---
+    self.rect.x += self.vx
+
+    for rect, tile in self.rects_map:
+        if self.rect.colliderect(rect):
+
+            if self.vx > 0:
+                self.rect.right = rect.left
+
+            if self.vx < 0:
+                self.rect.left = rect.right
+
+    # --- Y movement ---
+    self.rect.y += self.vy
+
+    for rect, tile in self.rects_map:
+        if self.rect.colliderect(rect):
+
+            if self.vy > 0:
+                self.rect.bottom = rect.top
+
+            if self.vy < 0:
+                self.rect.top = rect.bottom
        
 def player_animation(self, FW, BW, LW, RW):
 
@@ -112,7 +138,7 @@ def bomb_spawning(self):
 
 class Player(pygame.sprite.Sprite):
 
-    def __init__(self, x, y, offset_x, offset_y, explosion_group, bomb_group, update_tilemap_def):
+    def __init__(self, x, y, offset_x, offset_y, explosion_group, bomb_group, update_tilemap_def, rects_map):
         super().__init__()
         self.ANIMS_FW = load_walking_anims('fw')
         self.ANIMS_BW = load_walking_anims('bw')
@@ -137,6 +163,7 @@ class Player(pygame.sprite.Sprite):
         self.explosion_group = explosion_group
         self.bomb_group = bomb_group
         self.update_tilemap_def = update_tilemap_def
+        self.rects_map = rects_map
     
         self.damage_flag = False
         self.invincible = False
@@ -146,10 +173,12 @@ class Player(pygame.sprite.Sprite):
         self.player_hit = pygame.mixer.Sound('assets/sound/sfx/hurt.mp3')
         self.player_hit.set_volume(0.7)   
 
-    def update(self, current_bomb_group, current_explosion_group):
+    def update(self, current_bomb_group, current_explosion_group, current_rects_map):
+        check_tile_collision(self)
         self.anim_index += 0.1
         self.bomb_group = current_bomb_group
         self.explosion_group = current_explosion_group
+        self.rects_map = current_rects_map
         player_input(self)
         player_animation(self, self.ANIMS_FW, self.ANIMS_BW, self.ANIMS_LW, self.ANIMS_RW)
         take_damage(self)

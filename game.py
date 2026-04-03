@@ -29,6 +29,10 @@ pygame.mixer.music.load("assets/sound/music/music1.mp3")
 pygame.mixer.music.set_volume(0.6)
 player_group = pygame.sprite.GroupSingle()
 bomb_group = pygame.sprite.Group()
+enemies_group = pygame.sprite.Group()
+explosion_group = pygame.sprite.Group()
+
+TILES_LV1 = {k: pygame.image.load(v).convert() for k, v in constants.TILES_LVL1.items()}
 
 pygame.mixer.music.play(-1)  # -1 = loop forever
 enemy_hit = pygame.mixer.Sound('assets/sound/sfx/enemy_hit.mp3')
@@ -49,8 +53,6 @@ pygame.draw.rect(
     (176, 176, 176, 200), 
     (0, 0, 830, 75),        
 )
-
-TILES_LV1 = {k: pygame.image.load(v).convert() for k, v in constants.TILES_LVL1.items()}
 
 top_menu_rect = top_menu_surface.get_rect(center=(450, 50))
 
@@ -89,10 +91,8 @@ def update_tilemap(x, y):
     Tilemap.update_map_surface(map_surface, x, y, 0, TILES_LV1, TILE_SIZE)
 
 spawn_point = find_spawn_point(LVL1_TM)
-explosion_group = pygame.sprite.Group()
-player = Player(spawn_point.centerx, spawn_point.centery, offset_x, offset_y, explosion_group, bomb_group, update_tilemap)
+player = Player(spawn_point.centerx, spawn_point.centery, offset_x, offset_y, explosion_group, bomb_group, update_tilemap, rects_map)
 player_group.add(player)
-enemies_group = pygame.sprite.Group()
 
 game_lives_c_txt = pixel_font.render(f'X{player.lives}', False, 'White')
 game_lives_c_txt_rect = game_lives_c_txt.get_rect(center=(top_menu_rect.left + 80, top_menu_rect.centery - 10))
@@ -100,7 +100,6 @@ thomas_lives_icon_rect = thomas_lives_icon.get_rect(center=(top_menu_rect.left +
 
 game_score_txt = pixel_font.render(f'PUNTUACIÓN: {SCORE}', False, 'White')
 game_score_txt_rect = game_score_txt.get_rect(center=(top_menu_rect.left + 100, top_menu_rect.centery + 13))
-
 
 enemies_group.add(VEnemy(365,200, rects_map))
 enemies_group.add(VEnemy(447,581, rects_map))
@@ -115,38 +114,11 @@ enemies_group.add(HEnemy(197,253, rects_map))
 enemies_group.add(HEnemy(448,170, rects_map))
 enemies_group.add(HEnemy(531,590, rects_map))
 
-def check_tile_collision(player, rects_map):
-
-    # --- X movement ---
-    player.rect.x += player.vx
-
-    for rect, tile in rects_map:
-        if player.rect.colliderect(rect):
-
-            if player.vx > 0:
-                player.rect.right = rect.left
-
-            if player.vx < 0:
-                player.rect.left = rect.right
-
-    # --- Y movement ---
-    player.rect.y += player.vy
-
-    for rect, tile in rects_map:
-        if player.rect.colliderect(rect):
-
-            if player.vy > 0:
-                player.rect.bottom = rect.top
-
-            if player.vy < 0:
-                player.rect.top = rect.bottom
- 
 def flash_player():
     if player.invincible:
-        if pygame.time.get_ticks() % 50 < 10:
+        if pygame.time.get_ticks() % 30 < 10:
             return
     player_group.draw(screen)
-
 
 while True:
 
@@ -165,8 +137,7 @@ while True:
     screen.blit(game_lives_c_txt, game_lives_c_txt_rect)
     screen.blit(thomas_lives_icon, thomas_lives_icon_rect)
     screen.blit(game_score_txt, game_score_txt_rect)
-    check_tile_collision(player, rects_map)
-    player_group.update(bomb_group, explosion_group)
+    player_group.update(bomb_group, explosion_group, rects_map)
     bomb_group.draw(screen)
     bomb_group.update()
     explosion_group.update()
