@@ -109,11 +109,10 @@ def bomb_spawning(self):
             bomb = Bomb(x, y, tile_x, tile_y, TM_LVL1, self.offset_x, self.offset_y, TILE_SIZE, self.explosion_group, self.update_tilemap_def)
             self.bomb_group.add(bomb)
             self.bomb_counter += 1
-    return self.bomb_counter
 
 class Player(pygame.sprite.Sprite):
 
-    def __init__(self, x, y, offset_x, offset_y, explosion_group, bomb_group, update_tilemap_def, bomb_counter):
+    def __init__(self, x, y, offset_x, offset_y, explosion_group, bomb_group, update_tilemap_def):
         super().__init__()
         self.ANIMS_FW = load_walking_anims('fw')
         self.ANIMS_BW = load_walking_anims('bw')
@@ -128,6 +127,7 @@ class Player(pygame.sprite.Sprite):
         self. vy = 0
         self.anim_index = 0
         self.collision_flags = COLLISION_FLAGS
+        self.bomb_counter = 0
     
         self.rect = self.image.get_rect()
         self.rect.centerx = x
@@ -137,8 +137,7 @@ class Player(pygame.sprite.Sprite):
         self.explosion_group = explosion_group
         self.bomb_group = bomb_group
         self.update_tilemap_def = update_tilemap_def
-        self.bomb_counter = bomb_counter
-
+    
         self.damage_flag = False
         self.invincible = False
         self.lives = 3
@@ -147,14 +146,19 @@ class Player(pygame.sprite.Sprite):
         self.player_hit = pygame.mixer.Sound('assets/sound/sfx/hurt.mp3')
         self.player_hit.set_volume(0.7)   
 
-
-    def update(self):
+    def update(self, current_bomb_group, current_explosion_group):
         self.anim_index += 0.1
+        self.bomb_group = current_bomb_group
+        self.explosion_group = current_explosion_group
         player_input(self)
         player_animation(self, self.ANIMS_FW, self.ANIMS_BW, self.ANIMS_LW, self.ANIMS_RW)
         take_damage(self)
-        bomb_spawning(self, )
-    
+
+        if len(self.bomb_group) == 0 and len(self.explosion_group) == 0:
+            self.bomb_counter = 0
+
+        bomb_spawning(self)
+
         if self.invincible:
             now = pygame.time.get_ticks()
             if now - self.invincible_time > self.invincible_duration:

@@ -17,8 +17,6 @@ MAP_Y_OFFSET = constants.TM_Y_OFFSET
 
 SCORE = 0
 
-BOMB_COUNTER = 0
-
 LVL1_TM = constants.TM_LVL1
 
 # pygame setup
@@ -92,7 +90,7 @@ def update_tilemap(x, y):
 
 spawn_point = find_spawn_point(LVL1_TM)
 explosion_group = pygame.sprite.Group()
-player = Player(spawn_point.centerx, spawn_point.centery, offset_x, offset_y, explosion_group, bomb_group, update_tilemap, BOMB_COUNTER)
+player = Player(spawn_point.centerx, spawn_point.centery, offset_x, offset_y, explosion_group, bomb_group, update_tilemap)
 player_group.add(player)
 enemies_group = pygame.sprite.Group()
 
@@ -168,8 +166,7 @@ while True:
     screen.blit(thomas_lives_icon, thomas_lives_icon_rect)
     screen.blit(game_score_txt, game_score_txt_rect)
     check_tile_collision(player, rects_map)
-    # BOMB_COUNTER = bomb_spawning(BOMB_COUNTER)
-    player_group.update()
+    player_group.update(bomb_group, explosion_group)
     bomb_group.draw(screen)
     bomb_group.update()
     explosion_group.update()
@@ -185,9 +182,6 @@ while True:
     for enemy in enemies_group:
         if(player.rect.colliderect(enemy)):
             player.damage_flag = True
-
-    if len(bomb_group) == 0 and len(explosion_group) == 0:
-        BOMB_COUNTER = 0
 
     enemy_deaths = pygame.sprite.groupcollide(enemies_group, explosion_group, True, False)
     if enemy_deaths:
