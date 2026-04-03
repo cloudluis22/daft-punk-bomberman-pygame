@@ -3,7 +3,6 @@ import constants
 from sys import exit
 from classes.game_environment.tilemap import Tilemap
 from classes.actors.player import Player
-from classes.actors.bomb import Bomb
 from classes.actors.venemy import VEnemy
 from classes.actors.henemy import HEnemy
 
@@ -71,6 +70,8 @@ map_pixel_height = MAP_HEIGHT * TILE_SIZE
 
 offset_x = (SCREEN_WIDTH - map_pixel_width) // 2
 offset_y = (SCREEN_HEIGHT - map_pixel_height) // 2 + MAP_Y_OFFSET
+rects_map = Tilemap.create_rects_map(LVL1_TM, [1, 2], TILE_SIZE, offset_x, offset_y)
+map_surface = Tilemap.create_tilemap_surface(LVL1_TM, TILE_SIZE, TILES_LV1)
 
 def find_spawn_point(tilemap):
     for y, row in enumerate(tilemap):
@@ -82,10 +83,17 @@ def find_spawn_point(tilemap):
                     TILE_SIZE,
                     TILE_SIZE)
             
+def update_tilemap(x, y):
+    global rects_map
+    global map_surface
+
+    rects_map = Tilemap.update_rects_map(rects_map, x, y, offset_x, offset_y, TILE_SIZE)
+    Tilemap.update_map_surface(map_surface, x, y, 0, TILES_LV1, TILE_SIZE)
+
 spawn_point = find_spawn_point(LVL1_TM)
-player = Player(spawn_point.centerx, spawn_point.centery)
-player_group.add(player)
 explosion_group = pygame.sprite.Group()
+player = Player(spawn_point.centerx, spawn_point.centery, offset_x, offset_y, explosion_group, bomb_group, update_tilemap, BOMB_COUNTER)
+player_group.add(player)
 enemies_group = pygame.sprite.Group()
 
 game_lives_c_txt = pixel_font.render(f'X{player.lives}', False, 'White')
@@ -95,7 +103,7 @@ thomas_lives_icon_rect = thomas_lives_icon.get_rect(center=(top_menu_rect.left +
 game_score_txt = pixel_font.render(f'PUNTUACIÓN: {SCORE}', False, 'White')
 game_score_txt_rect = game_score_txt.get_rect(center=(top_menu_rect.left + 100, top_menu_rect.centery + 13))
 
-rects_map = Tilemap.create_rects_map(LVL1_TM, [1, 2], TILE_SIZE, offset_x, offset_y)
+
 enemies_group.add(VEnemy(365,200, rects_map))
 enemies_group.add(VEnemy(447,581, rects_map))
 enemies_group.add(VEnemy(281,297, rects_map))
@@ -135,37 +143,12 @@ def check_tile_collision(player, rects_map):
             if player.vy < 0:
                 player.rect.top = rect.bottom
  
-def update_tilemap(x, y):
-    global rects_map
-    global map_surface
-
-    rects_map = Tilemap.update_rects_map(rects_map, x, y, offset_x, offset_y, TILE_SIZE)
-    Tilemap.update_map_surface(map_surface, x, y, 0, TILES_LV1, TILE_SIZE)
-
-def bomb_spawning(bomb_counter):
-
-    if bomb_counter < 2:
-        keys = pygame.key.get_just_pressed()
-        if keys[pygame.K_SPACE]:
-
-            tile_x = (player.rect.centerx - offset_x) // TILE_SIZE
-            tile_y = (player.rect.centery - offset_y) // TILE_SIZE
-
-            x = offset_x + tile_x * TILE_SIZE + TILE_SIZE // 2
-            y = offset_y + tile_y * TILE_SIZE + TILE_SIZE // 2
-
-            bomb = Bomb(x, y, tile_x, tile_y, LVL1_TM, offset_x, offset_y, TILE_SIZE, explosion_group, update_tilemap)
-            bomb_group.add(bomb)
-            bomb_counter += 1
-    return bomb_counter
-
 def flash_player():
     if player.invincible:
         if pygame.time.get_ticks() % 50 < 10:
             return
     player_group.draw(screen)
 
-map_surface = Tilemap.create_tilemap_surface(LVL1_TM, TILE_SIZE, TILES_LV1)
 
 while True:
 
@@ -185,7 +168,7 @@ while True:
     screen.blit(thomas_lives_icon, thomas_lives_icon_rect)
     screen.blit(game_score_txt, game_score_txt_rect)
     check_tile_collision(player, rects_map)
-    BOMB_COUNTER = bomb_spawning(BOMB_COUNTER)
+    # BOMB_COUNTER = bomb_spawning(BOMB_COUNTER)
     player_group.update()
     bomb_group.draw(screen)
     bomb_group.update()
