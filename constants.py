@@ -22,10 +22,13 @@ TM_Y_OFFSET = 30
 ## 1: solid wall
 ## 2: solid destructible
 ## 3: player spawn
+## 4: solid wall 2
+## 5: v-enemy spawn (THESE TWO WILL HAVE SAME TEXTURE AS WALKABLE)
+## 6: h-enemy spawn
 
 TM_LVL1 = [
 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-[1, 0, 2, 0, 2, 0, 2, 0, 0, 2, 0, 2, 0, 3, 1],
+[1, 0, 2, 0, 2, 0, 2, 0, 6, 2, 0, 2, 0, 3, 1],
 [1, 2, 1, 0, 1, 0, 1, 2, 1, 2, 1, 2, 1, 0, 1],
 [1, 0, 0, 2, 0, 0, 2, 0, 2, 0, 0, 0, 2, 0, 1],
 [1, 2, 1, 0, 1, 0, 1, 0, 1, 2, 1, 0, 1, 0, 1],
@@ -33,7 +36,7 @@ TM_LVL1 = [
 [1, 0, 1, 0, 1, 0, 1, 2, 1, 0, 1, 2, 1, 0, 1],
 [1, 2, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 1],
 [1, 0, 1, 0, 1, 2, 1, 0, 1, 0, 1, 0, 1, 0, 1],
-[1, 2, 0, 0, 2, 0, 2, 0, 0, 0, 2, 2, 0, 0, 1],
+[1, 2, 0, 0, 2, 0, 2, 0, 0, 0, 2, 2, 0, 5, 1],
 [1, 0, 1, 2, 1, 0, 1, 0, 1, 2, 1, 0, 1, 0, 1],
 [1, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 2, 1],
 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -47,5 +50,7 @@ TILES_LVL1 = {
     0: 'assets/graphics/tiles/concrete_floor.png',
     1: 'assets/graphics/tiles/concrete_wall.png',
     2: 'assets/graphics/tiles/crate.png',
-    3: 'assets/graphics/tiles/spawn.png'    
+    3: 'assets/graphics/tiles/spawn.png',
+    5: 'assets/graphics/tiles/concrete_floor.png',
+    6: 'assets/graphics/tiles/concrete_floor.png' 
 }

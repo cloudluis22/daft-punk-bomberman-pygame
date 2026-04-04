@@ -73,16 +73,6 @@ offset_y = (SCREEN_HEIGHT - map_pixel_height) // 2 + MAP_Y_OFFSET
 rects_map = Tilemap.create_rects_map(LVL1_TM, [1, 2], TILE_SIZE, offset_x, offset_y)
 map_surface = Tilemap.create_tilemap_surface(LVL1_TM, TILE_SIZE, TILES_LV1)
 
-def find_player_spawn_point(tilemap):
-    for row_index, row in enumerate(tilemap):
-        for col_index, tile in enumerate(row):
-            if tile == 3:
-                return pygame.Rect(
-                    offset_x + col_index * TILE_SIZE,
-                    offset_y + row_index * TILE_SIZE,
-                    TILE_SIZE,
-                    TILE_SIZE)
-            
 def update_tilemap(x, y):
     global rects_map
     global map_surface
@@ -90,9 +80,26 @@ def update_tilemap(x, y):
     rects_map = Tilemap.update_rects_map(rects_map, x, y, offset_x, offset_y, TILE_SIZE)
     Tilemap.update_map_surface(map_surface, x, y, 0, TILES_LV1, TILE_SIZE)
 
-spawn_point = find_player_spawn_point(LVL1_TM)
-player = Player(spawn_point.centerx, spawn_point.centery, offset_x, offset_y, explosion_group, bomb_group, update_tilemap, rects_map)
-player_group.add(player)
+def spawn_entities(tilemap):
+    for row_index, row in enumerate(tilemap):
+        for col_index, tile in enumerate(row):
+            point = pygame.Rect(
+                offset_x + col_index * TILE_SIZE,
+                offset_y + row_index * TILE_SIZE,
+                TILE_SIZE,
+                TILE_SIZE)
+            if tile == 3:
+                player = Player(point.centerx, point.centery, offset_x, offset_y, explosion_group, bomb_group, update_tilemap, rects_map)
+                player_group.add(player)
+            elif tile == 5:
+                v_enemy = V_Enemy(point.centerx, point.centery, rects_map)
+                enemies_group.add(v_enemy)
+            elif tile == 6:
+                h_enemy = H_Enemy(point.centerx, point.centery, rects_map)
+                enemies_group.add(h_enemy)
+
+spawn_entities(LVL1_TM)
+player = player_group.sprites()[0]
 
 game_lives_c_txt = pixel_font.render(f'X{player.lives}', False, 'White')
 game_lives_c_txt_rect = game_lives_c_txt.get_rect(center=(top_menu_rect.left + 80, top_menu_rect.centery - 10))
@@ -100,19 +107,6 @@ thomas_lives_icon_rect = thomas_lives_icon.get_rect(center=(top_menu_rect.left +
 
 game_score_txt = pixel_font.render(f'PUNTUACIÓN: {SCORE}', False, 'White')
 game_score_txt_rect = game_score_txt.get_rect(center=(top_menu_rect.left + 100, top_menu_rect.centery + 13))
-
-# enemies_group.add(V_Enemy(447,581, rects_map))
-# enemies_group.add(V_Enemy(365,200, rects_map))
-# enemies_group.add(V_Enemy(281,297, rects_map))
-# enemies_group.add(V_Enemy(448,252, rects_map))
-# enemies_group.add(V_Enemy(533,333, rects_map))
-# enemies_group.add(H_Enemy(195,586, rects_map))
-# enemies_group.add(H_Enemy(533,254, rects_map))
-# enemies_group.add(H_Enemy(322,421, rects_map))
-# enemies_group.add(H_Enemy(576,423, rects_map))
-# enemies_group.add(H_Enemy(197,253, rects_map))
-# enemies_group.add(H_Enemy(448,170, rects_map))
-# enemies_group.add(H_Enemy(531,590, rects_map))
 
 def flash_player():
     if player.invincible:
