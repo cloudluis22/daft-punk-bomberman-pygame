@@ -1,6 +1,6 @@
 import pygame
 
-class VEnemy(pygame.sprite.Sprite):
+class V_Enemy(pygame.sprite.Sprite):
 
     def __init__(self, x, y, rects_map):
         super().__init__()

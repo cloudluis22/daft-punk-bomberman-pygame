@@ -3,8 +3,8 @@ import constants
 from sys import exit
 from classes.game_environment.tilemap import Tilemap
 from classes.actors.player import Player
-from classes.actors.venemy import VEnemy
-from classes.actors.henemy import HEnemy
+from classes.actors.v_enemy import V_Enemy
+from classes.actors.h_enemy import H_Enemy
 
 # IMPORTANT VARIABLES
 SCREEN_WIDTH = constants.SCREEN_WIDTH
@@ -73,13 +73,13 @@ offset_y = (SCREEN_HEIGHT - map_pixel_height) // 2 + MAP_Y_OFFSET
 rects_map = Tilemap.create_rects_map(LVL1_TM, [1, 2], TILE_SIZE, offset_x, offset_y)
 map_surface = Tilemap.create_tilemap_surface(LVL1_TM, TILE_SIZE, TILES_LV1)
 
-def find_spawn_point(tilemap):
-    for y, row in enumerate(tilemap):
-        for x, tile in enumerate(row):
+def find_player_spawn_point(tilemap):
+    for row_index, row in enumerate(tilemap):
+        for col_index, tile in enumerate(row):
             if tile == 3:
                 return pygame.Rect(
-                    offset_x + x * TILE_SIZE,
-                    offset_y + y * TILE_SIZE,
+                    offset_x + col_index * TILE_SIZE,
+                    offset_y + row_index * TILE_SIZE,
                     TILE_SIZE,
                     TILE_SIZE)
             
@@ -90,7 +90,7 @@ def update_tilemap(x, y):
     rects_map = Tilemap.update_rects_map(rects_map, x, y, offset_x, offset_y, TILE_SIZE)
     Tilemap.update_map_surface(map_surface, x, y, 0, TILES_LV1, TILE_SIZE)
 
-spawn_point = find_spawn_point(LVL1_TM)
+spawn_point = find_player_spawn_point(LVL1_TM)
 player = Player(spawn_point.centerx, spawn_point.centery, offset_x, offset_y, explosion_group, bomb_group, update_tilemap, rects_map)
 player_group.add(player)
 
@@ -101,18 +101,18 @@ thomas_lives_icon_rect = thomas_lives_icon.get_rect(center=(top_menu_rect.left +
 game_score_txt = pixel_font.render(f'PUNTUACIÓN: {SCORE}', False, 'White')
 game_score_txt_rect = game_score_txt.get_rect(center=(top_menu_rect.left + 100, top_menu_rect.centery + 13))
 
-enemies_group.add(VEnemy(365,200, rects_map))
-enemies_group.add(VEnemy(447,581, rects_map))
-enemies_group.add(VEnemy(281,297, rects_map))
-enemies_group.add(VEnemy(448,252, rects_map))
-enemies_group.add(VEnemy(533,333, rects_map))
-enemies_group.add(HEnemy(195,586, rects_map))
-enemies_group.add(HEnemy(533,254, rects_map))
-enemies_group.add(HEnemy(322,421, rects_map))
-enemies_group.add(HEnemy(576,423, rects_map))
-enemies_group.add(HEnemy(197,253, rects_map))
-enemies_group.add(HEnemy(448,170, rects_map))
-enemies_group.add(HEnemy(531,590, rects_map))
+# enemies_group.add(V_Enemy(447,581, rects_map))
+# enemies_group.add(V_Enemy(365,200, rects_map))
+# enemies_group.add(V_Enemy(281,297, rects_map))
+# enemies_group.add(V_Enemy(448,252, rects_map))
+# enemies_group.add(V_Enemy(533,333, rects_map))
+# enemies_group.add(H_Enemy(195,586, rects_map))
+# enemies_group.add(H_Enemy(533,254, rects_map))
+# enemies_group.add(H_Enemy(322,421, rects_map))
+# enemies_group.add(H_Enemy(576,423, rects_map))
+# enemies_group.add(H_Enemy(197,253, rects_map))
+# enemies_group.add(H_Enemy(448,170, rects_map))
+# enemies_group.add(H_Enemy(531,590, rects_map))
 
 def flash_player():
     if player.invincible:
