@@ -182,11 +182,11 @@ class Player(pygame.sprite.Sprite):
         player_input(self)
         player_animation(self, self.ANIMS_FW, self.ANIMS_BW, self.ANIMS_LW, self.ANIMS_RW)
         take_damage(self)
+        bomb_spawning(self)
 
         if len(self.bomb_group) == 0 and len(self.explosion_group) == 0:
             self.bomb_counter = 0
 
-        bomb_spawning(self)
 
         if self.invincible:
             now = pygame.time.get_ticks()

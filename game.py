@@ -1,6 +1,7 @@
 import pygame
 import constants
 from sys import exit
+from classes.interface.hud import HUD
 from classes.game_environment.tilemap import Tilemap
 from classes.actors.player import Player
 from classes.actors.v_enemy import V_Enemy
@@ -31,6 +32,7 @@ player_group = pygame.sprite.GroupSingle()
 bomb_group = pygame.sprite.Group()
 enemies_group = pygame.sprite.Group()
 explosion_group = pygame.sprite.Group()
+hud_group = pygame.sprite.GroupSingle()
 
 TILES_LV1 = {k: pygame.image.load(v).convert() for k, v in constants.TILES_LVL1.items()}
 
@@ -41,27 +43,6 @@ enemy_hit.set_volume(0.7)
 player_hit = pygame.mixer.Sound('assets/sound/sfx/hurt.mp3')
 player_hit.set_volume(0.7)
 
-pixel_font_lg = pygame.font.Font('assets/fonts/pixel_font.ttf', 30)
-pixel_font = pygame.font.Font('assets/fonts/pixel_font.ttf', 25)
-
-thomas_lives_icon = pygame.image.load('assets/graphics/icons/thomas_icon.png').convert_alpha()
-
-top_menu_surface = pygame.Surface((830, 75), pygame.SRCALPHA)
-
-pygame.draw.rect(
-    top_menu_surface,
-    (176, 176, 176, 200), 
-    (0, 0, 830, 75),        
-)
-
-top_menu_rect = top_menu_surface.get_rect(center=(450, 50))
-
-game_title_txt = pixel_font_lg.render('Daft Punk Bomberman', False, 'White')
-game_title_rect = game_title_txt.get_rect(center=(top_menu_rect.centerx, top_menu_rect.centery - 20))
-
-game_level_txt = pixel_font.render('Nivel 1: Rave à Paris', False, 'White')
-game_level_txt_rect = game_title_txt.get_rect(center=(game_title_rect.centerx + 30, game_title_rect.bottom + 13))
- 
 # Fondo de pantalla de Paris para nivel 1
 paris_bgrnd = pygame.image.load('assets/graphics/backgrounds/paris.png').convert()
  
@@ -100,13 +81,8 @@ def spawn_entities(tilemap):
 
 spawn_entities(LVL1_TM)
 player = player_group.sprites()[0]
-
-game_lives_c_txt = pixel_font.render(f'X{player.lives}', False, 'White')
-game_lives_c_txt_rect = game_lives_c_txt.get_rect(center=(top_menu_rect.left + 80, top_menu_rect.centery - 10))
-thomas_lives_icon_rect = thomas_lives_icon.get_rect(center=(top_menu_rect.left + 48, top_menu_rect.centery - 12))
-
-game_score_txt = pixel_font.render(f'PUNTUACIÓN: {SCORE}', False, 'White')
-game_score_txt_rect = game_score_txt.get_rect(center=(top_menu_rect.left + 100, top_menu_rect.centery + 13))
+hud = HUD(screen, player, SCORE, player.lives)
+hud_group.add(hud)
 
 def flash_player():
     if player.invincible:
@@ -121,16 +97,8 @@ while True:
             pygame.quit()
             exit()
 
-    game_lives_c_txt = pixel_font.render(f'X{player.lives}', False, 'White')
-    game_score_txt = pixel_font.render(f'PUNTUACIÓN: {SCORE}', False, 'White')
     screen.blit(paris_bgrnd, (0, 0))
     screen.blit(map_surface, (offset_x, offset_y))
-    screen.blit(top_menu_surface, top_menu_rect)
-    screen.blit(game_title_txt, game_title_rect)
-    screen.blit(game_level_txt, game_level_txt_rect)
-    screen.blit(game_lives_c_txt, game_lives_c_txt_rect)
-    screen.blit(thomas_lives_icon, thomas_lives_icon_rect)
-    screen.blit(game_score_txt, game_score_txt_rect)
     player_group.update(bomb_group, explosion_group, rects_map)
     bomb_group.draw(screen)
     bomb_group.update()
@@ -138,6 +106,8 @@ while True:
     explosion_group.draw(screen)
     enemies_group.draw(screen)
     enemies_group.update(rects_map)
+    hud_group.update(player.lives, SCORE)
+    hud_group.draw(screen)
     flash_player()
 
     for explosion in explosion_group:
