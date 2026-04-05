@@ -1,5 +1,5 @@
 import pygame
-from explosion import Explosion
+from classes.actors.explosion import Explosion
 
 def get_explosion_tiles(tilemap, bomb_x, bomb_y, radius=1):
 
@@ -34,7 +34,7 @@ def get_explosion_tiles(tilemap, bomb_x, bomb_y, radius=1):
 
 class Bomb(pygame.sprite.Sprite):
 
-    def __init__(self, x, y, tile_x, tile_y, tilemap, offset_x, offset_y, tile_size, explosion_group):
+    def __init__(self, x, y, tile_x, tile_y, tilemap, offset_x, offset_y, tile_size, explosion_group, update_tm, sound_manager):
         super().__init__()
 
         self.image = pygame.image.load("assets/graphics/sprites/bomb/bomb_1.png").convert_alpha()
@@ -54,8 +54,9 @@ class Bomb(pygame.sprite.Sprite):
 
         self.explosion_group = explosion_group
 
-        self.explosion_sfx = pygame.mixer.Sound('assets/sound/sfx/explosion.mp3')
-        self.explosion_sfx.set_volume(0.8)
+        self.sound_manager = sound_manager
+
+        self.update_tm = update_tm
 
     def update(self):
 
@@ -63,7 +64,7 @@ class Bomb(pygame.sprite.Sprite):
 
         if self.timer <= 0:
             self.explode()
-            self.explosion_sfx.play()
+            self.sound_manager.play_sound("sfx_explosion")
             self.kill()
 
     def explode(self):
@@ -80,3 +81,4 @@ class Bomb(pygame.sprite.Sprite):
 
             if self.tilemap[y][x] == 2:
                 self.tilemap[y][x] = 0
+                self.update_tm(x, y)
