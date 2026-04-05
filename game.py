@@ -7,10 +7,12 @@ from classes.game_environment.sound_manager import SoundManager
 from classes.actors.player import Player
 from classes.actors.v_enemy import V_Enemy
 from classes.actors.h_enemy import H_Enemy
+from classes.interface.main_menu import MainMenu
 
 # IMPORTANT VARIABLES
 SCREEN_WIDTH = constants.SCREEN_WIDTH
 SCREEN_HEIGHT = constants.SCREEN_HEIGHT
+game_state = constants.STATE_MENU # Default state.
 
 TILE_SIZE = constants.TILE_SIZE
 MAP_WIDTH = constants.TM_WIDTH     
@@ -26,6 +28,10 @@ pygame.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Daft Punk Bomberman")
 clock = pygame.time.Clock()
+
+# Menu
+main_menu = MainMenu()
+menu_surface, menu_rect = main_menu.draw_menu()
 
 # TILES
 TILES_LV1 = {k: pygame.image.load(v).convert() for k, v in constants.TILES_LVL1.items()}
@@ -93,31 +99,35 @@ while True:
             pygame.quit()
             exit()
 
-    screen.blit(paris_bgrnd, (0, 0))
-    screen.blit(map_surface, (offset_x, offset_y))
-    player_group.update(bomb_group, explosion_group, rects_map)
-    bomb_group.draw(screen)
-    bomb_group.update()
-    explosion_group.update()
-    explosion_group.draw(screen)
-    enemies_group.draw(screen)
-    enemies_group.update(rects_map)
-    hud_group.update(player.lives, SCORE)
-    hud_group.draw(screen)
-    flash_player()
+    if(game_state == constants.STATE_MENU):
+        screen.blit(menu_surface, menu_rect)
 
-    for explosion in explosion_group:
-        if(player.rect.colliderect(explosion)):
-            player.damage_flag = True
-       
-    for enemy in enemies_group:
-        if(player.rect.colliderect(enemy)):
-            player.damage_flag = True
+    elif(game_state == constants.STATE_GAME):
+        screen.blit(paris_bgrnd, (0, 0))
+        screen.blit(map_surface, (offset_x, offset_y))
+        player_group.update(bomb_group, explosion_group, rects_map)
+        bomb_group.draw(screen)
+        bomb_group.update()
+        explosion_group.update()
+        explosion_group.draw(screen)
+        enemies_group.draw(screen)
+        enemies_group.update(rects_map)
+        hud_group.update(player.lives, SCORE)
+        hud_group.draw(screen)
+        flash_player()
 
-    enemy_deaths = pygame.sprite.groupcollide(enemies_group, explosion_group, True, False)
-    if enemy_deaths:
-        sound_manager.play_sound("sfx_enemy_hit")
-        SCORE += 200
+        for explosion in explosion_group:
+            if(player.rect.colliderect(explosion)):
+                player.damage_flag = True
+        
+        for enemy in enemies_group:
+            if(player.rect.colliderect(enemy)):
+                player.damage_flag = True
+
+        enemy_deaths = pygame.sprite.groupcollide(enemies_group, explosion_group, True, False)
+        if enemy_deaths:
+            sound_manager.play_sound("sfx_enemy_hit")
+            SCORE += 200
 
     pygame.display.update()
     clock.tick(60)
