@@ -10,9 +10,9 @@
 - Sound (music, sfx) ✅
 
 ## Phase 2
-- Tilemap optimization
-- Improved collisions
-- Better enemy logic
+- Tilemap optimization ✅
+- Improved collisions ✅
+- Better enemy logic (DISCARDED)
 - Improved UI
 - Sprites redesign
 
