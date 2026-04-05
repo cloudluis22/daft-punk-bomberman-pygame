@@ -100,6 +100,7 @@ while True:
             exit()
 
     if(game_state == constants.STATE_MENU):
+        menu_surface, menu_rect = main_menu.draw_menu()
         screen.blit(menu_surface, menu_rect)
 
     elif(game_state == constants.STATE_GAME):

@@ -19,8 +19,10 @@ class MainMenu():
         self.font_lg = pg.font.Font(pixel_font_path, 80)
         self.font_sm = pg.font.Font(pixel_font_path, 20)
         self.menu_bg = pg.image.load(background_path).convert_alpha()
+        self.menu_bg_upscaled = pg.transform.scale2x(self.menu_bg)
         self.menu_logo = pg.image.load(dp_logo_path).convert_alpha()
         self.menu_logo = pg.transform.scale(self.menu_logo, (900, 225))
+        self.angle_bg = 0
 
     def draw_menu(self):
         menu_surface = self.surface
@@ -38,7 +40,12 @@ class MainMenu():
         ]
 
         # We draw the background first.
-        menu_surface.blit(self.menu_bg, (0, 0))
+        # rotation logic
+        self.angle_bg += 0.05 
+        rotating_menu_bg = pg.transform.rotate(self.menu_bg_upscaled, self.angle_bg)
+        rotated_menu_rect = rotating_menu_bg.get_rect(center = menu_rect.center)
+
+        menu_surface.blit(rotating_menu_bg, rotated_menu_rect)
         menu_logo_rect = self.menu_logo.get_rect(center=(menu_rect.centerx + 20, menu_rect.centery - 200))
         menu_surface.blit(self.menu_logo, menu_logo_rect)
 
