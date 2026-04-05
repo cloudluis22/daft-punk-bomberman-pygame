@@ -3,6 +3,7 @@ import constants
 from sys import exit
 from classes.interface.hud import HUD
 from classes.game_environment.tilemap import Tilemap
+from classes.game_environment.sound_manager import SoundManager
 from classes.actors.player import Player
 from classes.actors.v_enemy import V_Enemy
 from classes.actors.h_enemy import H_Enemy
@@ -29,17 +30,8 @@ clock = pygame.time.Clock()
 # TILES
 TILES_LV1 = {k: pygame.image.load(v).convert() for k, v in constants.TILES_LVL1.items()}
 
-# GAME MUSIC AND SFX
-pygame.mixer.init()
-pygame.mixer.music.load("assets/sound/music/music1.mp3")
-enemy_hit = pygame.mixer.Sound('assets/sound/sfx/enemy_hit.mp3')
-player_hit = pygame.mixer.Sound('assets/sound/sfx/hurt.mp3')
-
-pygame.mixer.music.set_volume(0.6)
-enemy_hit.set_volume(0.7)
-player_hit.set_volume(0.7)
-
-pygame.mixer.music.play(-1)  # -1 = loop forever
+# SOUND MANAGER
+sound_manager = SoundManager()
 
 player_group = pygame.sprite.GroupSingle()
 bomb_group = pygame.sprite.Group()
@@ -74,7 +66,7 @@ def spawn_entities(tilemap):
                 TILE_SIZE,
                 TILE_SIZE)
             if tile == 3:
-                player = Player(point.centerx, point.centery, offset_x, offset_y, explosion_group, bomb_group, update_tilemap, rects_map)
+                player = Player(point.centerx, point.centery, offset_x, offset_y, explosion_group, bomb_group, update_tilemap, rects_map, sound_manager)
                 player_group.add(player)
             elif tile == 5:
                 v_enemy = V_Enemy(point.centerx, point.centery, rects_map)
@@ -124,7 +116,7 @@ while True:
 
     enemy_deaths = pygame.sprite.groupcollide(enemies_group, explosion_group, True, False)
     if enemy_deaths:
-        enemy_hit.play()
+        sound_manager.play_sound("sfx_enemy_hit")
         SCORE += 200
 
     pygame.display.update()
