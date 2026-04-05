@@ -72,7 +72,3 @@ class HUD(pg.sprite.Sprite):
         elif(self.score != current_score):
             self.score = current_score            
             draw_in_hud(self)
-        
-    
-
-    

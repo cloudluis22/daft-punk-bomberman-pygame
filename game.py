@@ -20,28 +20,32 @@ SCORE = 0
 
 LVL1_TM = constants.TM_LVL1
 
-# pygame setup
+# INITIAL SETUP
 pygame.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Daft Bomberman")
+pygame.display.set_caption("Daft Punk Bomberman")
 clock = pygame.time.Clock()
+
+# TILES
+TILES_LV1 = {k: pygame.image.load(v).convert() for k, v in constants.TILES_LVL1.items()}
+
+# GAME MUSIC AND SFX
 pygame.mixer.init()
 pygame.mixer.music.load("assets/sound/music/music1.mp3")
+enemy_hit = pygame.mixer.Sound('assets/sound/sfx/enemy_hit.mp3')
+player_hit = pygame.mixer.Sound('assets/sound/sfx/hurt.mp3')
+
 pygame.mixer.music.set_volume(0.6)
+enemy_hit.set_volume(0.7)
+player_hit.set_volume(0.7)
+
+pygame.mixer.music.play(-1)  # -1 = loop forever
+
 player_group = pygame.sprite.GroupSingle()
 bomb_group = pygame.sprite.Group()
 enemies_group = pygame.sprite.Group()
 explosion_group = pygame.sprite.Group()
 hud_group = pygame.sprite.GroupSingle()
-
-TILES_LV1 = {k: pygame.image.load(v).convert() for k, v in constants.TILES_LVL1.items()}
-
-pygame.mixer.music.play(-1)  # -1 = loop forever
-enemy_hit = pygame.mixer.Sound('assets/sound/sfx/enemy_hit.mp3')
-enemy_hit.set_volume(0.7)
-
-player_hit = pygame.mixer.Sound('assets/sound/sfx/hurt.mp3')
-player_hit.set_volume(0.7)
 
 # Fondo de pantalla de Paris para nivel 1
 paris_bgrnd = pygame.image.load('assets/graphics/backgrounds/paris.png').convert()
