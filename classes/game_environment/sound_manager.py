@@ -5,7 +5,9 @@ current_path = Path(__file__).parent
 root_path = current_path.parent.parent
 
 music_paths_dict = {
-    "mus_level1": root_path / "assets" / "sound" / "music" / "music1.mp3"
+    "mus_menu": root_path / "assets" / "sound" / "music" / "music_menu.mp3",
+    "mus_level1": root_path / "assets" / "sound" / "music" / "music1.mp3",
+
 }
 
 sfx_paths_dict = {
@@ -21,10 +23,9 @@ class SoundManager():
 
         self.vol_sfx = 0.7
         self.vol_music = 1
+        self.isTrackPlaying = False
 
         pg.mixer.init()
-        pg.mixer.music.load(music_paths_dict["mus_level1"])
-        pg.mixer.music.play(-1)
 
         for key, path in sfx_paths_dict.items():
             self.sfx_dict[key] = pg.mixer.Sound(path)
@@ -32,3 +33,10 @@ class SoundManager():
         
     def play_sound(self, sound):
         self.sfx_dict[sound].play()
+
+    def play_music(self, track):
+        if self.isTrackPlaying == False:
+            pg.mixer.music.load(music_paths_dict[track])
+            pg.mixer.music.play(-1)
+            self.isTrackPlaying = True
+

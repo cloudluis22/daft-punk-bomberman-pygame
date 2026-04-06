@@ -102,6 +102,7 @@ while True:
     if(game_state == constants.STATE_MENU):
         menu_surface, menu_rect = main_menu.draw_menu()
         screen.blit(menu_surface, menu_rect)
+        sound_manager.play_music("mus_menu")
 
     elif(game_state == constants.STATE_GAME):
         screen.blit(paris_bgrnd, (0, 0))
