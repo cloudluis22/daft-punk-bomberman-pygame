@@ -37,20 +37,24 @@ class MainMenu():
         self.h_graphic_guy = pg.transform.scale_by(self.h_graphic_guy, 0.4)
         self.h_graphic_guy_rect = self.h_graphic_guy.get_rect()
 
+        menu_elements_dict = [
+            {'text': 'BOMBERMAN', 'font': self.font_lg, 'pos': (self.rect.centerx, self.rect.centery - 60)},
+            {'text': 'START GAME', 'font': self.font, 'pos': (self.rect.centerx, self.rect.centery + 50)},
+            {'text': 'LEVEL SELECT', 'font': self.font, 'pos': (self.rect.centerx, self.rect.centery + 100)},
+            {'text': 'EXIT', 'font': self.font, 'pos': (self.rect.centerx, self.rect.centery + 150)},
+            {'text': 'COPYRIGHT© MMXXVI - JOSÉ LUIS ÁVILA JUÁREZ - GRAFICACIÓN', 'font': self.font_sm, 'pos': (self.rect.centerx, self.rect.bottom - 30)},
+        ]
+
+        self.menu_elements_rendered_dict = []
+
+        for element in menu_elements_dict:
+            txt_surf = element['font'].render(element['text'], False, 'white')
+            txt_rect = txt_surf.get_rect(center=element['pos'])
+            self.menu_elements_rendered_dict.append({'text': txt_surf, 'rect': txt_rect})
+        
     def draw_menu(self):
         menu_surface = self.surface
         menu_rect = self.rect
-        font = self.font
-        font_lg = self.font_lg
-        font_sm = self.font_sm
-
-        menu_elements = [
-            {'text': 'BOMBERMAN', 'font': font_lg, 'pos': (menu_rect.centerx, menu_rect.centery - 60)},
-            {'text': 'START GAME', 'font': font, 'pos': (menu_rect.centerx, menu_rect.centery + 50)},
-            {'text': 'LEVEL SELECT', 'font': font, 'pos': (menu_rect.centerx, menu_rect.centery + 100)},
-            {'text': 'EXIT', 'font': font, 'pos': (menu_rect.centerx, menu_rect.centery + 150)},
-            {'text': 'COPYRIGHT© MMXXVI - JOSÉ LUIS ÁVILA JUÁREZ - GRAFICACIÓN', 'font': font_sm, 'pos': (menu_rect.centerx, menu_rect.bottom - 30)},
-        ]
 
         self.h_graphic_thomas_rect.left = menu_rect.left + 25
         self.h_graphic_thomas_rect.centery = menu_rect.centery
@@ -70,9 +74,8 @@ class MainMenu():
         menu_surface.blit(self.h_graphic_thomas, self.h_graphic_thomas_rect)
         menu_surface.blit(self.h_graphic_guy, self.h_graphic_guy_rect)
 
-        for element in menu_elements:
-            txt_surf = element['font'].render(element['text'], False, 'white')
-            txt_rect = txt_surf.get_rect(center=element['pos'])
-            menu_surface.blit(txt_surf, txt_rect)
+        # blitting text
+        for element in self.menu_elements_rendered_dict:
+            menu_surface.blit(element["text"], element["rect"])
 
         return menu_surface, menu_rect       
