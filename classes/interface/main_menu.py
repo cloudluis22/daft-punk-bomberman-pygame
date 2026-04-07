@@ -31,6 +31,7 @@ class MainMenu():
         self.angle_bg = 0
 
         self.selected_index = None
+        self.mouse_pos = None
 
         self.h_graphic_thomas = pg.image.load(thomas_helmet_path).convert_alpha()
         self.h_graphic_thomas = pg.transform.scale_by(self.h_graphic_thomas, 0.4)
@@ -57,7 +58,7 @@ class MainMenu():
         self.menu_elements_rendered_dict = []
 
         for element in menu_elements_dict:
-            txt_surf = element['font'].render(element['text'], False, 'white'),
+            txt_surf = element['font'].render(element['text'], False, 'white')
             txt_surf_selected = element['font'].render(element['text'], False, 'red')
             txt_rect = txt_surf.get_rect(center=element['pos'])
             self.menu_elements_rendered_dict.append({'text': txt_surf, 'text_selected':  txt_surf_selected, 'rect': txt_rect})
@@ -65,6 +66,7 @@ class MainMenu():
     def draw_menu(self):
         menu_surface = self.surface
         menu_rect = self.rect
+        self.mouse_pos = pg.mouse.get_pos()
 
         # We draw the background first.
         # rotation logic
@@ -80,6 +82,13 @@ class MainMenu():
 
         # blitting text
         for element in self.menu_elements_rendered_dict:
-            menu_surface.blit(element["text"], element["rect"])
+            if(element["rect"].collidepoint(self.mouse_pos)):
+                menu_surface.blit(element["text_selected"], element["rect"])
+                pg.mouse.set_cursor(pg.SYSTEM_CURSOR_HAND)
+
+            else:
+                menu_surface.blit(element["text"], element["rect"])
+                pg.mouse.set_cursor(pg.SYSTEM_CURSOR_ARROW)
+
 
         return menu_surface, menu_rect       
