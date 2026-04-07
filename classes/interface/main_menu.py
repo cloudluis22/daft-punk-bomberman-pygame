@@ -13,7 +13,7 @@ thomas_helmet_path = root_path / "assets" / "graphics" / "icons" / "thomas_menu.
 guy_helmet_path = root_path / "assets" / "graphics" / "icons" / "guy_menu.png"
 
 class MainMenu():
-    def __init__(self, sound_manager):
+    def __init__(self, sound_manager, ev_menu_selected):
         self.height = constants.SCREEN_HEIGHT
         self.width = constants.SCREEN_WIDTH
         self.sound_manager = sound_manager
@@ -34,6 +34,9 @@ class MainMenu():
 
         self.selected_index = None
         self.mouse_pos = None
+
+        self.option_selected = False # Purpose: prevent any more input once an option is choosed
+        self.ev_menu_selected = ev_menu_selected
 
         self.h_graphic_thomas = pg.image.load(thomas_helmet_path).convert_alpha()
         self.h_graphic_thomas = pg.transform.scale_by(self.h_graphic_thomas, 0.4)
@@ -81,6 +84,8 @@ class MainMenu():
         match self.selected_index:
             case 0:
                 self.sound_manager.play_sound("sfx_menu_select")
+                self.option_selected = True
+                pg.time.set_timer(self.ev_menu_selected, 1000, loops=1)
             case 2:
                 pg.quit()
                 exit()

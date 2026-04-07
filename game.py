@@ -23,6 +23,9 @@ SCORE = 0
 
 LVL1_TM = constants.TM_LVL1
 
+## EVENTS
+EV_MENU_SELECTED = pygame.event.custom_type()
+
 # INITIAL SETUP
 pygame.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -33,7 +36,7 @@ clock = pygame.time.Clock()
 sound_manager = SoundManager()
 
 # Menu
-main_menu = MainMenu(sound_manager)
+main_menu = MainMenu(sound_manager, EV_MENU_SELECTED)
 menu_surface, menu_rect, menu_canClick = main_menu.draw_menu()
 
 # TILES
@@ -98,21 +101,24 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
+        if event.type == EV_MENU_SELECTED:
+            print('Juego comenzado')
 
     # I believe I have to add button input for non sprite classes here becasuse
     # they don't have an update method.
         if game_state == constants.STATE_MENU:
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_DOWN or event.key == pygame.K_s:
-                    main_menu.index_inc()
-                elif event.key == pygame.K_UP or event.key == pygame.K_w:
-                    main_menu.index_dec()
-                elif event.key == pygame.K_RETURN:
-                    main_menu.handleMenuSelect()
+            if main_menu.option_selected == False: 
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                        main_menu.index_inc()
+                    elif event.key == pygame.K_UP or event.key == pygame.K_w:
+                        main_menu.index_dec()
+                    elif event.key == pygame.K_RETURN:
+                        main_menu.handleMenuSelect()
 
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                if menu_canClick:
-                    main_menu.handleMenuSelect()
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    if menu_canClick:
+                        main_menu.handleMenuSelect()
     
     if(game_state == constants.STATE_MENU):
         menu_surface, menu_rect, menu_canClick = main_menu.draw_menu()
