@@ -29,15 +29,15 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Daft Punk Bomberman")
 clock = pygame.time.Clock()
 
+# SOUND MANAGER
+sound_manager = SoundManager()
+
 # Menu
-main_menu = MainMenu()
+main_menu = MainMenu(sound_manager)
 menu_surface, menu_rect = main_menu.draw_menu()
 
 # TILES
 TILES_LV1 = {k: pygame.image.load(v).convert() for k, v in constants.TILES_LVL1.items()}
-
-# SOUND MANAGER
-sound_manager = SoundManager()
 
 player_group = pygame.sprite.GroupSingle()
 bomb_group = pygame.sprite.Group()

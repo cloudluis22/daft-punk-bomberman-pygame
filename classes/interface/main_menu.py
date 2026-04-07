@@ -12,9 +12,10 @@ thomas_helmet_path = root_path / "assets" / "graphics" / "icons" / "thomas_menu.
 guy_helmet_path = root_path / "assets" / "graphics" / "icons" / "guy_menu.png"
 
 class MainMenu():
-    def __init__(self):
+    def __init__(self, sound_manager):
         self.height = constants.SCREEN_HEIGHT
         self.width = constants.SCREEN_WIDTH
+        self.sound_manager = sound_manager
 
         self.surface = pg.Surface((self.width, self.height))
         self.rect = self.surface.get_rect()
@@ -48,11 +49,11 @@ class MainMenu():
         self.h_graphic_guy_rect.centery = self.rect.centery
 
         menu_elements_dict = [
-            {'text': 'BOMBERMAN', 'font': self.font_lg, 'pos': (self.rect.centerx, self.rect.centery - 60)},
-            {'text': 'START GAME', 'font': self.font, 'pos': (self.rect.centerx, self.rect.centery + 50)},
-            {'text': 'LEVEL SELECT', 'font': self.font, 'pos': (self.rect.centerx, self.rect.centery + 100)},
-            {'text': 'EXIT', 'font': self.font, 'pos': (self.rect.centerx, self.rect.centery + 150)},
-            {'text': 'COPYRIGHT© MMXXVI - JOSÉ LUIS ÁVILA JUÁREZ - GRAFICACIÓN', 'font': self.font_sm, 'pos': (self.rect.centerx, self.rect.bottom - 30)},
+            {'text': 'BOMBERMAN', 'font': self.font_lg, 'pos': (self.rect.centerx, self.rect.centery - 60), "clickable": False, "index": None},
+            {'text': 'START GAME', 'font': self.font, 'pos': (self.rect.centerx, self.rect.centery + 50), "clickable": True, "index":0},
+            {'text': 'LEVEL SELECT', 'font': self.font, 'pos': (self.rect.centerx, self.rect.centery + 100), "clickable": True, "index":1},
+            {'text': 'EXIT', 'font': self.font, 'pos': (self.rect.centerx, self.rect.centery + 150), "clickable": True, "index":2},
+            {'text': 'COPYRIGHT© MMXXVI - JOSÉ LUIS ÁVILA JUÁREZ - GRAFICACIÓN', 'font': self.font_sm, 'pos': (self.rect.centerx, self.rect.bottom - 30), "clickable": False, "index": None},
         ]
 
         self.menu_elements_rendered_dict = []
@@ -61,8 +62,20 @@ class MainMenu():
             txt_surf = element['font'].render(element['text'], False, 'white')
             txt_surf_selected = element['font'].render(element['text'], False, 'red')
             txt_rect = txt_surf.get_rect(center=element['pos'])
-            self.menu_elements_rendered_dict.append({'text': txt_surf, 'text_selected':  txt_surf_selected, 'rect': txt_rect})
-        
+            txt_clickable = element["clickable"]
+            txt_index = element["index"]
+            self.menu_elements_rendered_dict.append({'text': txt_surf,
+                                                     'text_selected':  txt_surf_selected,
+                                                     'rect': txt_rect,
+                                                     'clickable': txt_clickable,
+                                                     'index': txt_index})
+
+    # Had to make this function purely for avoiding the sfx play itself infinitely
+    def change_selected_index(self, new_index):
+        if(new_index != self.selected_index):
+            self.sound_manager.play_sound('sfx_menu_hover')
+            self.selected_index = new_index
+
     def draw_menu(self):
         menu_surface = self.surface
         menu_rect = self.rect
@@ -82,13 +95,17 @@ class MainMenu():
 
         # blitting text
         for element in self.menu_elements_rendered_dict:
+
+            # This conditional checks mouse hovering
             if(element["rect"].collidepoint(self.mouse_pos)):
+                # We check if the element is clickable or not
+                if(element["clickable"] == True):
+                    self.change_selected_index(element["index"])
+
+            menu_surface.blit(element["text"], element["rect"])
+
+            # This checks for the selected index, making the selecting behaviour independent from mouse hovering and button pressing.
+            if(self.selected_index != None and self.selected_index == element["index"]):
                 menu_surface.blit(element["text_selected"], element["rect"])
-                pg.mouse.set_cursor(pg.SYSTEM_CURSOR_HAND)
 
-            else:
-                menu_surface.blit(element["text"], element["rect"])
-                pg.mouse.set_cursor(pg.SYSTEM_CURSOR_ARROW)
-
-
-        return menu_surface, menu_rect       
+        return menu_surface, menu_rect           
