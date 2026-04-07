@@ -18,6 +18,7 @@ TM_Y_OFFSET = 30
 # GAME STATE
 ################################################################################
 STATE_MENU = "MAIN MENU"
+STATE_LVL_START = "LEVEL START"
 STATE_GAME = "GAME"
 STATE_PAUSE = "PAUSE"
 
@@ -28,6 +29,12 @@ T_STATE_IDLE = "IDLE"
 T_STATE_FADING_OUT = "FADING_OUT"
 T_STATE_BLACKOUT = "BLACKOUT"
 T_STATE_FADING_IN = "FADING_IN"
+
+################################################################################
+# GAME EVENTS
+################################################################################
+EV_MENU_SELECTED = pg.event.custom_type()
+EV_GAME_TRANSITION = pg.event.custom_type()
 
 ################################################################################
 # TILEMAPS

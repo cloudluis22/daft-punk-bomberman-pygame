@@ -22,13 +22,11 @@ MAP_Y_OFFSET = constants.TM_Y_OFFSET
 
 LVL1_TM = constants.TM_LVL1
 
+
+
 # VARIABLES
 game_state = constants.STATE_MENU # Default state.
 score = 0
-
-## EVENTS
-EV_MENU_SELECTED = pygame.event.custom_type()
-EV_GAME_TRANSITION = pygame.event.custom_type()
 
 # INITIAL SETUP
 pygame.init()
@@ -40,7 +38,7 @@ clock = pygame.time.Clock()
 sound_manager = SoundManager()
 
 # MENU
-main_menu = MainMenu(sound_manager, EV_MENU_SELECTED, EV_GAME_TRANSITION)
+main_menu = MainMenu(sound_manager)
 menu_surface, menu_rect, menu_canClick = main_menu.draw_menu()
 
 # TILES
@@ -108,9 +106,9 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
-        if event.type == EV_MENU_SELECTED:
+        if event.type == constants.EV_MENU_SELECTED:
             main_menu.game_started = True
-        if event.type == EV_GAME_TRANSITION:
+        if event.type == constants.EV_GAME_TRANSITION:
             transition_manager.transition_fade_out()
 
     # I believe I have to add button input for non sprite classes here becasuse
@@ -163,6 +161,9 @@ while True:
             sound_manager.play_sound("sfx_enemy_hit")
             score += 200
     
-    screen.blit(transition_surface)
+    # Blit this only if is not in idle, this should improve performance a tiny bit
+    if transition_manager.state != constants.T_STATE_IDLE:
+        screen.blit(transition_surface)
+
     pygame.display.update()
     clock.tick(60)
