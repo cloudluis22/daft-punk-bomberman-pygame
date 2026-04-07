@@ -15,7 +15,8 @@ sfx_paths_dict = {
     "sfx_player_hit": root_path / "assets" / "sound" / "sfx" / "player_hit.mp3",
     "sfx_explosion": root_path / "assets" / "sound" / "sfx" / "explosion.mp3",
     "sfx_menu_hover": root_path / "assets" / "sound" / "sfx" / "menu-hover.mp3",
-    "sfx_menu_select": root_path / "assets" / "sound" / "sfx" / "menu-select.mp3"
+    "sfx_menu_select": root_path / "assets" / "sound" / "sfx" / "menu-select.mp3",
+    "sfx_game_start": root_path / "assets" / "sound" / "sfx" / "game-start.mp3",
 }
 
 class SoundManager():

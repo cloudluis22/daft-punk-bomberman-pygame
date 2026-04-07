@@ -102,7 +102,7 @@ while True:
             pygame.quit()
             exit()
         if event.type == EV_MENU_SELECTED:
-            print('Juego comenzado')
+            main_menu.game_started = True
 
     # I believe I have to add button input for non sprite classes here becasuse
     # they don't have an update method.
