@@ -1,6 +1,7 @@
 import pygame as pg
 import constants
 from pathlib import Path
+from sys import exit
 
 current_path = Path(__file__).parent
 root_path = current_path.parent.parent
@@ -75,6 +76,14 @@ class MainMenu():
         if(new_index != self.selected_index):
             self.sound_manager.play_sound('sfx_menu_hover')
             self.selected_index = new_index
+
+    def handleMenuSelect(self):
+        match self.selected_index:
+            case 0:
+                self.sound_manager.play_sound("sfx_menu_select")
+            case 2:
+                pg.quit()
+                exit()
 
     # functions for increasing, decreasing menu index
     def index_inc(self):

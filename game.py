@@ -107,10 +107,12 @@ while True:
                     main_menu.index_inc()
                 elif event.key == pygame.K_UP or event.key == pygame.K_w:
                     main_menu.index_dec()
+                elif event.key == pygame.K_RETURN:
+                    main_menu.handleMenuSelect()
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if menu_canClick:
-                    print("opcion clickeada")
+                    main_menu.handleMenuSelect()
     
     if(game_state == constants.STATE_MENU):
         menu_surface, menu_rect, menu_canClick = main_menu.draw_menu()
