@@ -34,7 +34,7 @@ sound_manager = SoundManager()
 
 # Menu
 main_menu = MainMenu(sound_manager)
-menu_surface, menu_rect = main_menu.draw_menu()
+menu_surface, menu_rect, menu_canClick = main_menu.draw_menu()
 
 # TILES
 TILES_LV1 = {k: pygame.image.load(v).convert() for k, v in constants.TILES_LVL1.items()}
@@ -107,9 +107,13 @@ while True:
                     main_menu.index_inc()
                 elif event.key == pygame.K_UP or event.key == pygame.K_w:
                     main_menu.index_dec()
+
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if menu_canClick:
+                    print("opcion clickeada")
     
     if(game_state == constants.STATE_MENU):
-        menu_surface, menu_rect = main_menu.draw_menu()
+        menu_surface, menu_rect, menu_canClick = main_menu.draw_menu()
         screen.blit(menu_surface, menu_rect)
         sound_manager.play_music("mus_menu")
 

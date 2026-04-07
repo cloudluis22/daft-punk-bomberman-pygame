@@ -96,6 +96,7 @@ class MainMenu():
         menu_surface = self.surface
         menu_rect = self.rect
         self.mouse_pos = pg.mouse.get_pos()
+        canClick = False
 
         # We draw the background first.
         # rotation logic
@@ -116,6 +117,7 @@ class MainMenu():
             if(element["rect"].collidepoint(self.mouse_pos)):
                 # We check if the element is clickable or not
                 if(element["clickable"] == True):
+                    canClick = True
                     self.change_selected_index(element["index"])
 
             menu_surface.blit(element["text"], element["rect"])
@@ -124,4 +126,4 @@ class MainMenu():
             if(self.selected_index != None and self.selected_index == element["index"]):
                 menu_surface.blit(element["text_selected"], element["rect"])
                 
-        return menu_surface, menu_rect           
+        return menu_surface, menu_rect, canClick          
