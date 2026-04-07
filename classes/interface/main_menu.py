@@ -27,15 +27,24 @@ class MainMenu():
         self.menu_bg_upscaled = pg.transform.scale2x(self.menu_bg)
         self.menu_logo = pg.image.load(dp_logo_path).convert_alpha()
         self.menu_logo = pg.transform.scale(self.menu_logo, (900, 225))
+        self.menu_logo_rect = self.menu_logo.get_rect(center=(self.rect.centerx + 20, self.rect.centery - 200))
         self.angle_bg = 0
 
-        self.h_graphic_thomas = pg.image.load(thomas_helmet_path)
-        self.h_graphic_thomas = pg.transform.scale_by(self.h_graphic_thomas, 0.4)
-        self.h_graphic_thomas_rect = self.h_graphic_thomas.get_rect()
+        self.selected_index = None
 
-        self.h_graphic_guy = pg.image.load(guy_helmet_path)
+        self.h_graphic_thomas = pg.image.load(thomas_helmet_path).convert_alpha()
+        self.h_graphic_thomas = pg.transform.scale_by(self.h_graphic_thomas, 0.4)
+
+        self.h_graphic_thomas_rect = self.h_graphic_thomas.get_rect()
+        self.h_graphic_thomas_rect.left = self.rect.left + 25
+        self.h_graphic_thomas_rect.centery = self.rect.centery
+
+        self.h_graphic_guy = pg.image.load(guy_helmet_path).convert_alpha()
         self.h_graphic_guy = pg.transform.scale_by(self.h_graphic_guy, 0.4)
+
         self.h_graphic_guy_rect = self.h_graphic_guy.get_rect()
+        self.h_graphic_guy_rect.right = self.rect.right - 25
+        self.h_graphic_guy_rect.centery = self.rect.centery
 
         menu_elements_dict = [
             {'text': 'BOMBERMAN', 'font': self.font_lg, 'pos': (self.rect.centerx, self.rect.centery - 60)},
@@ -48,19 +57,14 @@ class MainMenu():
         self.menu_elements_rendered_dict = []
 
         for element in menu_elements_dict:
-            txt_surf = element['font'].render(element['text'], False, 'white')
+            txt_surf = element['font'].render(element['text'], False, 'white'),
+            txt_surf_selected = element['font'].render(element['text'], False, 'red')
             txt_rect = txt_surf.get_rect(center=element['pos'])
-            self.menu_elements_rendered_dict.append({'text': txt_surf, 'rect': txt_rect})
+            self.menu_elements_rendered_dict.append({'text': txt_surf, 'text_selected':  txt_surf_selected, 'rect': txt_rect})
         
     def draw_menu(self):
         menu_surface = self.surface
         menu_rect = self.rect
-
-        self.h_graphic_thomas_rect.left = menu_rect.left + 25
-        self.h_graphic_thomas_rect.centery = menu_rect.centery
-
-        self.h_graphic_guy_rect.right = menu_rect.right - 25
-        self.h_graphic_guy_rect.centery = menu_rect.centery
 
         # We draw the background first.
         # rotation logic
@@ -68,9 +72,9 @@ class MainMenu():
         rotating_menu_bg = pg.transform.rotate(self.menu_bg_upscaled, self.angle_bg)
         rotated_menu_rect = rotating_menu_bg.get_rect(center = menu_rect.center)
 
+        # blitting all the grpahical stuff
         menu_surface.blit(rotating_menu_bg, rotated_menu_rect)
-        menu_logo_rect = self.menu_logo.get_rect(center=(menu_rect.centerx + 20, menu_rect.centery - 200))
-        menu_surface.blit(self.menu_logo, menu_logo_rect)
+        menu_surface.blit(self.menu_logo, self.menu_logo_rect)
         menu_surface.blit(self.h_graphic_thomas, self.h_graphic_thomas_rect)
         menu_surface.blit(self.h_graphic_guy, self.h_graphic_guy_rect)
 
