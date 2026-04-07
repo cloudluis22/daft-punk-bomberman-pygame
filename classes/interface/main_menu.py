@@ -39,6 +39,7 @@ class MainMenu():
         self.ev_menu_selected = ev_menu_selected
         self.game_started = False
         
+        self.heads_speed = 5
         self.moving_heads = True
         self.h_graphic_thomas = pg.image.load(thomas_helmet_path).convert_alpha()
         self.h_graphic_thomas = pg.transform.scale_by(self.h_graphic_thomas, 0.4)
@@ -144,8 +145,8 @@ class MainMenu():
                     menu_surface.blit(element["text_selected"], element["rect"])
         else: # code for the cinematic
             if self.moving_heads:
-                self.h_graphic_thomas_rect.x += 5
-                self.h_graphic_guy_rect.x -= 5
+                self.h_graphic_thomas_rect.x = self.heads_speed
+                self.h_graphic_guy_rect.x = self.heads_speed
 
             if self.h_graphic_thomas_rect.colliderect(self.h_graphic_guy_rect):
                 self.h_graphic_thomas_rect.right = self.h_graphic_guy_rect.left

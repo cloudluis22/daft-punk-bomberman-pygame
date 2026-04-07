@@ -8,6 +8,7 @@ from classes.actors.player import Player
 from classes.actors.v_enemy import V_Enemy
 from classes.actors.h_enemy import H_Enemy
 from classes.interface.main_menu import MainMenu
+from classes.interface.transition_manager import TransitionManager
 
 # IMPORTANT VARIABLES
 SCREEN_WIDTH = constants.SCREEN_WIDTH
@@ -35,12 +36,15 @@ clock = pygame.time.Clock()
 # SOUND MANAGER
 sound_manager = SoundManager()
 
-# Menu
+# MENU
 main_menu = MainMenu(sound_manager, EV_MENU_SELECTED)
 menu_surface, menu_rect, menu_canClick = main_menu.draw_menu()
 
 # TILES
 TILES_LV1 = {k: pygame.image.load(v).convert() for k, v in constants.TILES_LVL1.items()}
+
+# TRANSITION MANAGER
+transition_manager = TransitionManager() 
 
 player_group = pygame.sprite.GroupSingle()
 bomb_group = pygame.sprite.Group()
@@ -120,6 +124,8 @@ while True:
                     if menu_canClick:
                         main_menu.handleMenuSelect()
     
+    transition_surface = transition_manager.draw_transition()
+
     if(game_state == constants.STATE_MENU):
         menu_surface, menu_rect, menu_canClick = main_menu.draw_menu()
         screen.blit(menu_surface, menu_rect)
@@ -151,6 +157,7 @@ while True:
         if enemy_deaths:
             sound_manager.play_sound("sfx_enemy_hit")
             SCORE += 200
-
+    
+    screen.blit(transition_surface)
     pygame.display.update()
     clock.tick(60)
