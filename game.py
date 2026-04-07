@@ -10,22 +10,25 @@ from classes.actors.h_enemy import H_Enemy
 from classes.interface.main_menu import MainMenu
 from classes.interface.transition_manager import TransitionManager
 
-# IMPORTANT VARIABLES
+# IMPORTANT DATA
+# CONSTANTS
 SCREEN_WIDTH = constants.SCREEN_WIDTH
 SCREEN_HEIGHT = constants.SCREEN_HEIGHT
-game_state = constants.STATE_MENU # Default state.
 
 TILE_SIZE = constants.TILE_SIZE
 MAP_WIDTH = constants.TM_WIDTH     
 MAP_HEIGHT = constants.TM_HEIGHT
 MAP_Y_OFFSET = constants.TM_Y_OFFSET
 
-SCORE = 0
-
 LVL1_TM = constants.TM_LVL1
+
+# VARIABLES
+game_state = constants.STATE_MENU # Default state.
+score = 0
 
 ## EVENTS
 EV_MENU_SELECTED = pygame.event.custom_type()
+EV_GAME_TRANSITION = pygame.event.custom_type()
 
 # INITIAL SETUP
 pygame.init()
@@ -37,7 +40,7 @@ clock = pygame.time.Clock()
 sound_manager = SoundManager()
 
 # MENU
-main_menu = MainMenu(sound_manager, EV_MENU_SELECTED)
+main_menu = MainMenu(sound_manager, EV_MENU_SELECTED, EV_GAME_TRANSITION)
 menu_surface, menu_rect, menu_canClick = main_menu.draw_menu()
 
 # TILES
@@ -90,7 +93,7 @@ def spawn_entities(tilemap):
 
 spawn_entities(LVL1_TM)
 player = player_group.sprites()[0]
-hud = HUD(screen, player, SCORE, player.lives)
+hud = HUD(screen, player, score, player.lives)
 hud_group.add(hud)
 
 def flash_player():
@@ -107,6 +110,8 @@ while True:
             exit()
         if event.type == EV_MENU_SELECTED:
             main_menu.game_started = True
+        if event.type == EV_GAME_TRANSITION:
+            transition_manager.transition_fade_out()
 
     # I believe I have to add button input for non sprite classes here becasuse
     # they don't have an update method.
@@ -141,7 +146,7 @@ while True:
         explosion_group.draw(screen)
         enemies_group.draw(screen)
         enemies_group.update(rects_map)
-        hud_group.update(player.lives, SCORE)
+        hud_group.update(player.lives, score)
         hud_group.draw(screen)
         flash_player()
 
@@ -156,7 +161,7 @@ while True:
         enemy_deaths = pygame.sprite.groupcollide(enemies_group, explosion_group, True, False)
         if enemy_deaths:
             sound_manager.play_sound("sfx_enemy_hit")
-            SCORE += 200
+            score += 200
     
     screen.blit(transition_surface)
     pygame.display.update()

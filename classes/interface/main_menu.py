@@ -13,7 +13,7 @@ thomas_helmet_path = root_path / "assets" / "graphics" / "icons" / "thomas_menu.
 guy_helmet_path = root_path / "assets" / "graphics" / "icons" / "guy_menu.png"
 
 class MainMenu():
-    def __init__(self, sound_manager, ev_menu_selected):
+    def __init__(self, sound_manager, ev_menu_selected, ev_transition):
         self.height = constants.SCREEN_HEIGHT
         self.width = constants.SCREEN_WIDTH
         self.sound_manager = sound_manager
@@ -38,6 +38,7 @@ class MainMenu():
         self.option_selected = False # Purpose: prevent any more input once an option is choosed
         self.ev_menu_selected = ev_menu_selected
         self.game_started = False
+        self.ev_transition = ev_transition
         
         self.heads_speed = 5
         self.moving_heads = True
@@ -89,9 +90,12 @@ class MainMenu():
                 self.sound_manager.play_sound("sfx_menu_select")
                 self.option_selected = True
                 pg.time.set_timer(self.ev_menu_selected, 1000, loops=1)
+                pg.time.set_timer(self.ev_transition, 5000, loops=1)
+
             case 2:
                 pg.quit()
                 exit()
+
 
     # functions for increasing, decreasing menu index
     def index_inc(self):
@@ -145,12 +149,12 @@ class MainMenu():
                     menu_surface.blit(element["text_selected"], element["rect"])
         else: # code for the cinematic
             if self.moving_heads:
-                self.h_graphic_thomas_rect.x = self.heads_speed
-                self.h_graphic_guy_rect.x = self.heads_speed
+                self.h_graphic_thomas_rect.x += self.heads_speed
+                self.h_graphic_guy_rect.x -= self.heads_speed
 
             if self.h_graphic_thomas_rect.colliderect(self.h_graphic_guy_rect):
                 self.h_graphic_thomas_rect.right = self.h_graphic_guy_rect.left
                 self.sound_manager.play_sound("sfx_game_start")
                 self.moving_heads = False
-
+    
         return menu_surface, menu_rect, canClick          

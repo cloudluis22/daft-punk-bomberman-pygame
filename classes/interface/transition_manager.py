@@ -10,9 +10,17 @@ class TransitionManager():
         self.surface = pg.Surface((self.width, self.height), pg.SRCALPHA)
         self.rect = self.surface.get_rect()
 
-        self.state = constants.T_STATE_FADING_OUT
+        self.state = constants.T_STATE_IDLE
         self.t_alpha = 0
     
+    def transition_fade_out(self):
+        if self.state == constants.T_STATE_IDLE:
+            self.state = constants.T_STATE_FADING_OUT
+
+    def transition_fade_in(self):
+        if self.state == constants.T_STATE_BLACKOUT:
+            self.state = constants.T_STATE_FADING_IN
+
     def draw_transition(self):
         match self.state:
             case constants.T_STATE_IDLE:
@@ -27,6 +35,3 @@ class TransitionManager():
                     self.state = constants.T_STATE_BLACKOUT
 
         return self.surface
-
-
-    
