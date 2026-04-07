@@ -76,6 +76,22 @@ class MainMenu():
             self.sound_manager.play_sound('sfx_menu_hover')
             self.selected_index = new_index
 
+    # functions for increasing, decreasing menu index
+    def index_inc(self):
+ 
+        if(self.selected_index == None):
+            self.change_selected_index(0)
+        else:
+            if(self.selected_index < 2):
+                self.change_selected_index(self.selected_index + 1)
+
+    def index_dec(self):
+        if(self.selected_index == None):
+            self.change_selected_index(0)
+        else:
+            if(self.selected_index > 0):
+                self.change_selected_index(self.selected_index - 1)
+
     def draw_menu(self):
         menu_surface = self.surface
         menu_rect = self.rect
@@ -107,5 +123,5 @@ class MainMenu():
             # This checks for the selected index, making the selecting behaviour independent from mouse hovering and button pressing.
             if(self.selected_index != None and self.selected_index == element["index"]):
                 menu_surface.blit(element["text_selected"], element["rect"])
-
+                
         return menu_surface, menu_rect           

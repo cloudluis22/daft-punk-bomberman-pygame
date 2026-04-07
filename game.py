@@ -99,6 +99,15 @@ while True:
             pygame.quit()
             exit()
 
+    # I believe I have to add button input for non sprite classes here becasuse
+    # they don't have an update method.
+        if game_state == constants.STATE_MENU:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                    main_menu.index_inc()
+                elif event.key == pygame.K_UP or event.key == pygame.K_w:
+                    main_menu.index_dec()
+    
     if(game_state == constants.STATE_MENU):
         menu_surface, menu_rect = main_menu.draw_menu()
         screen.blit(menu_surface, menu_rect)
