@@ -13,10 +13,11 @@ thomas_helmet_path = root_path / "assets" / "graphics" / "icons" / "thomas_menu.
 guy_helmet_path = root_path / "assets" / "graphics" / "icons" / "guy_menu.png"
 
 class MainMenu():
-    def __init__(self, sound_manager):
+    def __init__(self, level_manager, sound_manager):
         self.height = constants.SCREEN_HEIGHT
         self.width = constants.SCREEN_WIDTH
         self.sound_manager = sound_manager
+        self.level_manager = level_manager
 
         self.surface = pg.Surface((self.width, self.height))
         self.rect = self.surface.get_rect()
@@ -155,6 +156,7 @@ class MainMenu():
                 self.h_graphic_thomas_rect.right = self.h_graphic_guy_rect.left
                 self.sound_manager.play_sound("sfx_game_start")
                 self.moving_heads = False
+                # self.level_manager.load_level(0)
                 pg.time.set_timer(self.ev_transition, 1000, loops=1)
     
         return menu_surface, menu_rect, canClick          
