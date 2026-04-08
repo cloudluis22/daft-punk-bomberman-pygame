@@ -6,21 +6,12 @@ from classes.interface.main_menu import MainMenu
 from classes.interface.transition_manager import TransitionManager
 from classes.game_environment.level_manager import LevelManager
 
-# IMPORTANT DATA
 # CONSTANTS
 SCREEN_WIDTH = constants.SCREEN_WIDTH
 SCREEN_HEIGHT = constants.SCREEN_HEIGHT
 
-TILE_SIZE = constants.TILE_SIZE
-MAP_WIDTH = constants.TM_WIDTH     
-MAP_HEIGHT = constants.TM_HEIGHT
-MAP_Y_OFFSET = constants.TM_Y_OFFSET
-
-LVL1_TM = constants.TM_LVL1
-
 # VARIABLES
 game_state = constants.STATE_GAME # Default state.
-score = 0
 
 # INITIAL SETUP
 pygame.init()
@@ -41,6 +32,8 @@ level_manager.load_level(1)
 
 while True:
 
+    transition_surface = transition_manager.draw_transition()
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -52,7 +45,7 @@ while True:
 
     # I believe I have to add button input for non sprite classes here becasuse
     # they don't have an update method.
-        if game_state == constants.STATE_GAME:
+        if game_state == constants.STATE_MENU:
             if main_menu.option_selected == False: 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_DOWN or event.key == pygame.K_s:

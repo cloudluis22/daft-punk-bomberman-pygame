@@ -125,5 +125,5 @@ class LevelManager():
         enemy_deaths = pg.sprite.groupcollide(self.enemies_group, self.explosion_group, True, False)
         if enemy_deaths:
             self.sound_manager.play_sound("sfx_enemy_hit")
-            score += 200
+            self.score += 200
     

@@ -21,6 +21,7 @@ STATE_MENU = "MAIN MENU"
 STATE_LVL_START = "LEVEL START"
 STATE_GAME = "GAME"
 STATE_PAUSE = "PAUSE"
+STATE_GAME_OVER = "GAME OVER"
 
 ################################################################################
 # TRANSITION STATES
