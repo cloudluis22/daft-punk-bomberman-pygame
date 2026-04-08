@@ -42,4 +42,8 @@ class SoundManager():
             pg.mixer.music.load(music_paths_dict[track])
             pg.mixer.music.play(-1)
             self.isTrackPlaying = True
+    
+    def stop_music_fadeout(self):
+        if self.isTrackPlaying:
+            pg.mixer.music.fadeout(2000)
 

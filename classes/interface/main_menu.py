@@ -156,6 +156,6 @@ class MainMenu():
                 self.h_graphic_thomas_rect.right = self.h_graphic_guy_rect.left
                 self.sound_manager.play_sound("sfx_game_start")
                 self.moving_heads = False
-                pg.time.set_timer(self.ev_transition, 1000, loops=1)
+                pg.time.set_timer(self.ev_transition, 1500, loops=1)
     
         return menu_surface, menu_rect, canClick          

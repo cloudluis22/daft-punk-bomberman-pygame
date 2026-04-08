@@ -43,6 +43,7 @@ while True:
 
         if event.type == constants.EV_MENU_SELECTED:
             main_menu.game_started = True
+            sound_manager.stop_music_fadeout()
 
         if event.type == constants.EV_GAME_START_TRANSITION:
             transition_manager.transition_fade_out()

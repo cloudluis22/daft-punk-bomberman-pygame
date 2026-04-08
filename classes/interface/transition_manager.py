@@ -29,7 +29,7 @@ class TransitionManager():
                 self.surface.fill((0, 0, 0, 255))
             case constants.T_STATE_FADING_OUT:
                 if self.t_alpha < 255:
-                    self.t_alpha += 15
+                    self.t_alpha += 10
                     if(self.t_alpha > 255):
                         self.t_alpha = 255
                     self.surface.fill((0, 0, 0, self.t_alpha))
@@ -37,7 +37,7 @@ class TransitionManager():
                     self.state = constants.T_STATE_BLACKOUT
             case constants.T_STATE_FADING_IN:
                 if self.t_alpha > 0:
-                    self.t_alpha -= 15
+                    self.t_alpha -= 10
                     if(self.t_alpha < 0):
                         self.t_alpha = 0
                     self.surface.fill((0, 0, 0, self.t_alpha))
