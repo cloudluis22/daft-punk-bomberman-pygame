@@ -11,7 +11,7 @@ SCREEN_WIDTH = constants.SCREEN_WIDTH
 SCREEN_HEIGHT = constants.SCREEN_HEIGHT
 
 # VARIABLES
-game_state = constants.STATE_MENU    # Default state.
+game_state = constants.STATE_MENU  # Default state.
 
 # INITIAL SETUP
 pygame.init()
@@ -29,7 +29,8 @@ main_menu = MainMenu(level_manager, sound_manager)
 menu_surface, menu_rect, menu_canClick = main_menu.draw_menu()
 
 # FLAGS
-lvl_loaded = False
+flag_lvl_loaded = False
+flag_start_cinematic = False
 
 while True:
 
@@ -50,6 +51,9 @@ while True:
         
         if event.type == constants.EV_LEVEL_LOADED:
             game_state = constants.STATE_LVL_START
+
+        if event.type == constants.EV_START_CINEMATIC:
+            print("xd")
         
     # I believe I have to add button input for non sprite classes here becasuse
     # they don't have an update method.
@@ -78,14 +82,17 @@ while True:
             transition_manager.transition_fade_in()
         screen.blit(level_manager.current_bg, (0, 0))
         screen.blit(level_manager.map_surface, (level_manager.offset_x, level_manager.offset_y))
-       
+        if flag_start_cinematic == False:
+            pygame.time.set_timer(constants.EV_START_CINEMATIC, 2000, loops=1)
+            flag_start_cinematic = True
+
     if(game_state == constants.STATE_GAME):
         level_manager.update_level()
 
     if(transition_manager.state == constants.T_STATE_BLACKOUT):
-        if(lvl_loaded == False): # Flag to make sure to do it once
+        if(flag_lvl_loaded == False): # Flag to make sure to do it once
             level_manager.load_level(1)
-            lvl_loaded = True
+            flag_lvl_loaded = True
         else:
             pass
 
