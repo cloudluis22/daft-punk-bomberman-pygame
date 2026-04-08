@@ -39,7 +39,7 @@ class MainMenu():
         self.option_selected = False # Purpose: prevent any more input once an option is choosed
         self.ev_menu_selected = constants.EV_MENU_SELECTED
         self.game_started = False
-        self.ev_transition = constants.EV_GAME_TRANSITION
+        self.ev_transition = constants.EV_GAME_START_TRANSITION
         
         self.heads_speed = 5
         self.moving_heads = True
@@ -156,7 +156,6 @@ class MainMenu():
                 self.h_graphic_thomas_rect.right = self.h_graphic_guy_rect.left
                 self.sound_manager.play_sound("sfx_game_start")
                 self.moving_heads = False
-                # self.level_manager.load_level(0)
                 pg.time.set_timer(self.ev_transition, 1000, loops=1)
     
         return menu_surface, menu_rect, canClick          

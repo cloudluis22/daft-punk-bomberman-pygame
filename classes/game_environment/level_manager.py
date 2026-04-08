@@ -92,11 +92,13 @@ class LevelManager():
                                             self.offset_x, self.offset_y)
         
         self.map_surface = Tilemap.create_tilemap_surface(self.current_tilemap, constants.TILE_SIZE, self.current_tiles)
+        event_loaded = pg.event.Event(constants.EV_LEVEL_LOADED)
+        pg.event.post(event_loaded)
 
-        self.spawn_entities()
-        player = self.player_group.sprites()[0]
-        hud = HUD(self.screen, player, self.score, player.lives)
-        self.hud_group.add(hud)
+        # self.spawn_entities()
+        # player = self.player_group.sprites()[0]
+        # hud = HUD(self.screen, player, self.score, player.lives)
+        # self.hud_group.add(hud)
 
     def update_level(self):
         player = self.player_group.sprites()[0]
@@ -126,4 +128,3 @@ class LevelManager():
         if enemy_deaths:
             self.sound_manager.play_sound("sfx_enemy_hit")
             self.score += 200
-    

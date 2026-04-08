@@ -11,7 +11,7 @@ SCREEN_WIDTH = constants.SCREEN_WIDTH
 SCREEN_HEIGHT = constants.SCREEN_HEIGHT
 
 # VARIABLES
-game_state = constants.STATE_GAME # Default state.
+game_state = constants.STATE_MENU    # Default state.
 
 # INITIAL SETUP
 pygame.init()
@@ -28,21 +28,28 @@ transition_manager = TransitionManager()
 main_menu = MainMenu(level_manager, sound_manager)
 menu_surface, menu_rect, menu_canClick = main_menu.draw_menu()
 
-level_manager.load_level(1)
+# FLAGS
+lvl_loaded = False
 
 while True:
 
     transition_surface = transition_manager.draw_transition()
 
+    # EVENT HANDLING LOGIC
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
+
         if event.type == constants.EV_MENU_SELECTED:
             main_menu.game_started = True
-        if event.type == constants.EV_GAME_TRANSITION:
-            transition_manager.transition_fade_out()
 
+        if event.type == constants.EV_GAME_START_TRANSITION:
+            transition_manager.transition_fade_out()
+        
+        if event.type == constants.EV_LEVEL_LOADED:
+            game_state = constants.STATE_LVL_START
+        
     # I believe I have to add button input for non sprite classes here becasuse
     # they don't have an update method.
         if game_state == constants.STATE_MENU:
@@ -59,13 +66,27 @@ while True:
                     if menu_canClick:
                         main_menu.handleMenuSelect()
     
+    # STATE HANDLING LOGIC
     if(game_state == constants.STATE_MENU):
         menu_surface, menu_rect, menu_canClick = main_menu.draw_menu()
         screen.blit(menu_surface, menu_rect)
         sound_manager.play_music("mus_menu")
 
-    elif(game_state == constants.STATE_GAME):
+    if(game_state == constants.STATE_LVL_START):
+        if(transition_manager.state == constants.T_STATE_BLACKOUT):
+            transition_manager.transition_fade_in()
+        screen.blit(level_manager.current_bg, (0, 0))
+        screen.blit(level_manager.map_surface, (level_manager.offset_x, level_manager.offset_y))
+       
+    if(game_state == constants.STATE_GAME):
         level_manager.update_level()
+
+    if(transition_manager.state == constants.T_STATE_BLACKOUT):
+        if(lvl_loaded == False): # Flag to make sure to do it once
+            level_manager.load_level(1)
+            lvl_loaded = True
+        else:
+            pass
 
     # Blit this only if is not in idle, this should improve performance a tiny bit
     if transition_manager.state != constants.T_STATE_IDLE:

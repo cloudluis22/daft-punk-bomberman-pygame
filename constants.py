@@ -35,7 +35,8 @@ T_STATE_FADING_IN = "FADING_IN"
 # GAME EVENTS
 ################################################################################
 EV_MENU_SELECTED = pg.event.custom_type()
-EV_GAME_TRANSITION = pg.event.custom_type()
+EV_GAME_START_TRANSITION = pg.event.custom_type()
+EV_LEVEL_LOADED = pg.event.custom_type()
 
 ################################################################################
 # TILEMAPS
