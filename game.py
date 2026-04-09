@@ -5,6 +5,7 @@ from classes.game_environment.sound_manager import SoundManager
 from classes.interface.main_menu import MainMenu
 from classes.interface.transition_manager import TransitionManager
 from classes.game_environment.level_manager import LevelManager
+from classes.interface.level_start_txt import LevelStartText
 
 # CONSTANTS
 SCREEN_WIDTH = constants.SCREEN_WIDTH
@@ -23,6 +24,7 @@ clock = pygame.time.Clock()
 sound_manager = SoundManager()
 level_manager = LevelManager(screen, game_state, sound_manager)
 transition_manager = TransitionManager()  
+level_start_txt = LevelStartText(1)
 
 # MENU
 main_menu = MainMenu(level_manager, sound_manager)
@@ -53,8 +55,8 @@ while True:
             game_state = constants.STATE_LVL_START
 
         if event.type == constants.EV_START_CINEMATIC:
-            print("xd")
-        
+            level_start_txt.isShowing = True
+            
     # I believe I have to add button input for non sprite classes here becasuse
     # they don't have an update method.
         if game_state == constants.STATE_MENU:
@@ -95,6 +97,10 @@ while True:
             flag_lvl_loaded = True
         else:
             pass
+
+
+    level_start_txt.move_text()
+    screen.blit(level_start_txt.txt_surf, level_start_txt.txt_rect)
 
     # Blit this only if is not in idle, this should improve performance a tiny bit
     if transition_manager.state != constants.T_STATE_IDLE:
