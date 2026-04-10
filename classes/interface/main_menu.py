@@ -37,9 +37,8 @@ class MainMenu():
         self.mouse_pos = None
 
         self.option_selected = False # Purpose: prevent any more input once an option is choosed
-        self.ev_menu_selected = constants.EV_MENU_SELECTED
         self.game_started = False
-        self.ev_transition = constants.EV_GAME_START_TRANSITION
+        self.played_menu_music = False
         
         self.heads_speed = 5
         self.moving_heads = True
@@ -90,7 +89,8 @@ class MainMenu():
             case 0:
                 self.sound_manager.play_sound("sfx_menu_select")
                 self.option_selected = True
-                pg.time.set_timer(self.ev_menu_selected, 500, loops=1)
+                evt_menu_selected = pg.event.Event(constants.EV_MENU_SELECTED)
+                pg.time.set_timer(evt_menu_selected, 500, loops=1)
 
             case 2:
                 pg.quit()
@@ -114,6 +114,11 @@ class MainMenu():
                 self.change_selected_index(self.selected_index - 1)
 
     def draw_menu(self):
+
+        if self.played_menu_music == False:
+          self.sound_manager.play_music("mus_menu")
+          self.played_menu_music = True
+
         menu_surface = self.surface
         menu_rect = self.rect
         self.mouse_pos = pg.mouse.get_pos()
@@ -156,6 +161,10 @@ class MainMenu():
                 self.h_graphic_thomas_rect.right = self.h_graphic_guy_rect.left
                 self.sound_manager.play_sound("sfx_game_start")
                 self.moving_heads = False
-                pg.time.set_timer(self.ev_transition, 1500, loops=1)
+                evt_transition = pg.event.Event(
+                    constants.EV_GAME_START_TRANSITION,
+                    level_index = 1
+                )
+                pg.time.set_timer(evt_transition, 1500, loops=1)
     
         return menu_surface, menu_rect, canClick          

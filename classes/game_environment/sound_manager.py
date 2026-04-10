@@ -26,7 +26,6 @@ class SoundManager():
 
         self.vol_sfx = 0.7
         self.vol_music = 1
-        self.isTrackPlaying = False
 
         pg.mixer.init()
 
@@ -38,12 +37,13 @@ class SoundManager():
         self.sfx_dict[sound].play()
 
     def play_music(self, track):
-        if self.isTrackPlaying == False:
+        if pg.mixer.music.get_busy() == False:
             pg.mixer.music.load(music_paths_dict[track])
             pg.mixer.music.play(-1)
             self.isTrackPlaying = True
     
     def stop_music_fadeout(self):
-        if self.isTrackPlaying:
+        if pg.mixer.music.get_busy():
             pg.mixer.music.fadeout(2000)
+            
 

@@ -13,13 +13,10 @@ root_path = current_path.parent.parent
 paris_bg = root_path / "assets" / "graphics" / "backgrounds" / "paris.png"
 
 class LevelManager():
-    def __init__(self, screen, game_state, sound_manager):
+    def __init__(self, screen, sound_manager):
 
         # SCREEN 
         self.screen = screen
-
-        # GAME STATE
-        self.game_state = game_state
 
         # MANAGERS
         self.sound_manager = sound_manager
@@ -92,13 +89,20 @@ class LevelManager():
                                             self.offset_x, self.offset_y)
         
         self.map_surface = Tilemap.create_tilemap_surface(self.current_tilemap, constants.TILE_SIZE, self.current_tiles)
-        event_loaded = pg.event.Event(constants.EV_LEVEL_LOADED)
+        event_loaded = pg.event.Event(constants.EV_MAP_LOADED)
         pg.event.post(event_loaded)
 
-        # self.spawn_entities()
-        # player = self.player_group.sprites()[0]
-        # hud = HUD(self.screen, player, self.score, player.lives)
-        # self.hud_group.add(hud)
+    def level_start(self, level):
+        self.spawn_entities()
+        player = self.player_group.sprites()[0]
+        hud = HUD(self.screen, player, self.score, player.lives)
+        self.hud_group.add(hud)
+        evt_level_run = pg.event.Event(constants.EV_LEVEL_RUN)
+        pg.event.post(evt_level_run)
+
+        match level:
+            case 1:
+                self.sound_manager.play_music("mus_level1")
 
     def update_level(self):
         player = self.player_group.sprites()[0]

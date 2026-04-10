@@ -27,13 +27,32 @@ class LevelStartText():
 
         self.txt_speed = 30
         self.isShowing = False
+        self.wasShowed = False
+        self.isCentered = False
+        self.waited = False
+        self.timestamp = None
+        self.wait_time = 1000
 
     def move_text(self):
         if self.isShowing:
             self.txt_rect.x += self.txt_speed
-            print(self.txt_rect.x)
-            print(self.rect.centerx)
-           
-        if self.txt_rect.center >= (self.rect.centerx, self.rect.centery):
-            self.txt_rect.center = (self.rect.centerx, self.rect.centery)
-            self.isShowing = False
+            self.timestamp = pg.time.get_ticks()
+            
+            if self.txt_rect.centerx >= self.rect.centerx:
+                self.txt_rect.centerx = self.rect.centerx
+                self.isShowing = False
+                self.isCentered = True
+
+        if self.isCentered and self.waited == False:
+            current_ticks = pg.time.get_ticks()
+
+            if current_ticks - self.timestamp >= self.wait_time:
+                self.wasShowed = True
+                self.isCentered = False
+        
+        if self.wasShowed:
+            self.txt_rect.x += self.txt_speed
+
+        if self.txt_rect.x >= self.rect.right + 100:
+            evt_lvl_ignite = pg.event.Event(constants.EV_LEVEL_IGNITE)
+            pg.event.post(evt_lvl_ignite)
