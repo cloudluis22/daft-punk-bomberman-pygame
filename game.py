@@ -120,6 +120,5 @@ while True:
     if transition_manager.state != constants.T_STATE_IDLE:
         screen.blit(transition_surface)
 
-    print(game_state)
     pygame.display.update()
     clock.tick(60)

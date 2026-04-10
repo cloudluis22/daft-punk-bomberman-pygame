@@ -108,8 +108,6 @@ def player_animation(self, FW, BW, LW, RW):
             case 'RW':
                 self.image = RW[int(self.anim_index)]
                 
-    self.image = pygame.transform.scale(self.image, (32, 35))
-
 def take_damage(self):
     if self.damage_flag:
         if not self.invincible:
@@ -145,7 +143,6 @@ class Player(pygame.sprite.Sprite):
         self.ANIMS_LW = load_walking_anims('lw')
         self.ANIMS_RW = load_walking_anims('rw')
         self.image = self.ANIMS_BW[1]
-        self.image = pygame.transform.scale(self.image, (32, 35))
         self.direction = 'BW'
         self.moving = False
         self.speed = 2
