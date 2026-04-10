@@ -153,6 +153,7 @@ class Player(pygame.sprite.Sprite):
         self.bomb_counter = 0
     
         self.rect = self.image.get_rect()
+        self.rect = self.rect.inflate(0, -4)
         self.rect.centerx = x
         self.rect.centery = y
         self.offset_x = offset_x
