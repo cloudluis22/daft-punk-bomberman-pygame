@@ -2,7 +2,7 @@ import pygame
 import constants
 from sys import exit
 from classes.game_environment.sound_manager import SoundManager
-from classes.interface.main_menu import MainMenu
+from classes.states.state_main_menu import MainMenu
 from classes.interface.transition_manager import TransitionManager
 from classes.game_environment.level_manager import LevelManager
 from classes.interface.level_start_txt import LevelStartText
