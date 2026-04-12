@@ -13,12 +13,11 @@ thomas_helmet_path = root_path / "assets" / "graphics" / "icons" / "thomas_menu.
 guy_helmet_path = root_path / "assets" / "graphics" / "icons" / "guy_menu.png"
 
 class MainMenu():
-    def __init__(self, level_manager, sound_manager):
+    def __init__(self, sound_manager):
         self.height = constants.SCREEN_HEIGHT
         self.width = constants.SCREEN_WIDTH
         self.sound_manager = sound_manager
-        self.level_manager = level_manager
-
+    
         self.surface = pg.Surface((self.width, self.height))
         self.rect = self.surface.get_rect()
 
@@ -35,6 +34,7 @@ class MainMenu():
 
         self.selected_index = None
         self.mouse_pos = None
+        self.canClick = False
 
         self.option_selected = False # Purpose: prevent any more input once an option is choosed
         self.game_started = False
@@ -96,7 +96,6 @@ class MainMenu():
                 pg.quit()
                 exit()
 
-
     # functions for increasing, decreasing menu index
     def index_inc(self):
  
@@ -122,7 +121,6 @@ class MainMenu():
         menu_surface = self.surface
         menu_rect = self.rect
         self.mouse_pos = pg.mouse.get_pos()
-        canClick = False
 
         # We draw the background first.
         # rotation logic
@@ -136,7 +134,7 @@ class MainMenu():
         menu_surface.blit(self.h_graphic_guy, self.h_graphic_guy_rect)
 
         # blitting text 
-        # if game is about to start then wipe the text for the cinematica
+        # if game is about to start then wipe the text for the cinematic
         if self.game_started == False: 
             menu_surface.blit(self.menu_logo, self.menu_logo_rect) # logo is wiped out too
             for element in self.menu_elements_rendered_dict:
@@ -144,14 +142,17 @@ class MainMenu():
                 if(element["rect"].collidepoint(self.mouse_pos)):
                     # We check if the element is clickable or not
                     if(element["clickable"] == True):
-                        canClick = True
+                        self.canClick = True
                         self.change_selected_index(element["index"])
+                    else:
+                        self.canClick = False
 
                 menu_surface.blit(element["text"], element["rect"])
 
                 # This checks for the selected index, making the selecting behaviour independent from mouse hovering and button pressing.
                 if(self.selected_index != None and self.selected_index == element["index"]):
                     menu_surface.blit(element["text_selected"], element["rect"])
+                    
         else: # code for the cinematic
             if self.moving_heads:
                 self.h_graphic_thomas_rect.x += self.heads_speed
@@ -162,9 +163,9 @@ class MainMenu():
                 self.sound_manager.play_sound("sfx_game_start")
                 self.moving_heads = False
                 evt_transition = pg.event.Event(
-                    constants.EV_GAME_START_TRANSITION,
+                    constants.EV_TRANSITION,
                     level_index = 1
                 )
                 pg.time.set_timer(evt_transition, 1500, loops=1)
     
-        return menu_surface, menu_rect, canClick          
+        return menu_surface, menu_rect          

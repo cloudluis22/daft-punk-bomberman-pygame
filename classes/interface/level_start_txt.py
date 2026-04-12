@@ -23,7 +23,7 @@ class LevelStartText():
         
         self.txt_str = f"LEVEL {self.lvl_index}\n START"
         self.txt_surf = self.font.render(self.txt_str, False, 'yellow')
-        self.txt_rect = self.txt_surf.get_rect(center=(self.rect.left - 100, self.rect.centery))
+        self.txt_rect = self.txt_surf.get_rect(center=(self.rect.left - 2000, self.rect.centery))
 
         self.txt_speed = 30
         self.isShowing = False
