@@ -23,7 +23,7 @@ class Game:
 
         self.input_handler = InputHandler()
         self.sound_manager = SoundManager()
-        self.level_manager = LevelManager(self.screen, self.sound_manager)
+        self.level_manager = LevelManager(self.screen, self.sound_manager, self.input_handler)
         self.transition_manager = TransitionManager()
 
         self.level_index = 1 

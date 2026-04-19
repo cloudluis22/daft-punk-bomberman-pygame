@@ -13,13 +13,16 @@ root_path = current_path.parent.parent
 paris_bg = root_path / "assets" / "graphics" / "backgrounds" / "paris.png"
 
 class LevelManager():
-    def __init__(self, screen, sound_manager):
+    def __init__(self, screen, sound_manager, input_handler):
 
         # SCREEN 
         self.screen = screen
 
         # MANAGERS
         self.sound_manager = sound_manager
+
+        # INPUT HANDLER
+        self.input_handler = input_handler
 
         # TILEMAP RELATED VARIABLES
         self.rects_map = []
@@ -54,7 +57,16 @@ class LevelManager():
                     constants.TILE_SIZE,
                     constants.TILE_SIZE)
                 if tile == 3:
-                    player = Player(point.centerx, point.centery, self.offset_x, self.offset_y, self.explosion_group, self.bomb_group, self.update_tilemap, self.rects_map, self.sound_manager)
+                    player = Player(point.centerx,
+                                    point.centery,
+                                    self.offset_x,
+                                    self.offset_y,
+                                    self.explosion_group,
+                                    self.bomb_group,
+                                    self.update_tilemap,
+                                    self.rects_map,
+                                    self.sound_manager,
+                                    self.input_handler)
                     self.player_group.add(player)
                 elif tile == 5:
                     v_enemy = V_Enemy(point.centerx, point.centery, self.rects_map)

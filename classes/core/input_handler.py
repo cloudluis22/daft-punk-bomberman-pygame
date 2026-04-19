@@ -23,7 +23,8 @@ class InputHandler:
         }
 
         self.joy_bindings = {
-            0: constants.INPUT_SELECT
+            0: constants.INPUT_SELECT,
+            2: constants.INPUT_DROP_BOMB
         }
 
         self.actions = {
@@ -91,7 +92,7 @@ class InputHandler:
                     self.actions[constants.INPUT_DOWN]["active"] = False
 
         # Handling continuous input
-        if self.isUsingController == False:
+        if not self.isUsingController:
             keys = pg.key.get_pressed()
             for key, action in self.key_bindings.items():
                 self.actions[action]["active"] = keys[key]
@@ -103,3 +104,13 @@ class InputHandler:
     def is_active(self, action):
         # returns true as long as it is holding press.
         return self.actions.get(action, {}).get("active", False)
+    
+    def low_freq_rumble(self):
+        for joy in self.joysticks:
+            joy.stop_rumble() # stop previous rumbles if happening.
+            joy.rumble(0.8, 0.2, 350)
+
+    def high_freq_rumble(self):
+        for joy in self.joysticks:
+            joy.stop_rumble()
+            joy.rumble(0.2, 0.5, 150)
