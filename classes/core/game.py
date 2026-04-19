@@ -1,6 +1,7 @@
 import pygame as pg
 import constants
 from sys import exit
+from classes.core.input_handler import InputHandler
 from classes.game_environment.sound_manager import SoundManager
 from classes.game_environment.level_manager import LevelManager
 from classes.interface.transition_manager import TransitionManager
@@ -16,10 +17,11 @@ class Game:
     def __init__(self):
         pg.init()
 
-        self.screen = pg.display.set_mode((constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT))
+        self.screen = pg.display.set_mode((constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT)) 
         pg.display.set_caption("Daft Punk Bomberman")
         self.clock = pg.time.Clock()
 
+        self.input_handler = InputHandler()
         self.sound_manager = SoundManager()
         self.level_manager = LevelManager(self.screen, self.sound_manager)
         self.transition_manager = TransitionManager()
@@ -49,6 +51,7 @@ class Game:
                 
                 self.current_state.handle_event(event)
             
+            self.input_handler.update()
             # ---- UPDATE ----
             self.current_state.update()
 
