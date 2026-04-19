@@ -43,6 +43,17 @@ EV_LEVEL_IGNITE = pg.event.custom_type()
 EV_LEVEL_RUN = pg.event.custom_type()
 
 ################################################################################
+# INPUT
+################################################################################
+INPUT_UP = "UP"
+INPUT_DOWN = "DOWN"
+INPUT_LEFT = "LEFT"
+INPUT_RIGHT = "RIGHT"
+INPUT_SELECT = "SELECT"
+INPUT_PAUSE = "PAUSE"
+INPUT_DROP_BOMB = "DROP_BOMB"
+
+################################################################################
 # TILEMAPS
 ################################################################################
 # SCHEME:

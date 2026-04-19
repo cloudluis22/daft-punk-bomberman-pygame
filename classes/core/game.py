@@ -36,6 +36,7 @@ class Game:
 
         # Initialized default with the first state.
         self.current_state = self.game_states_dict[constants.STATE_MENU]
+        self.events= {}
     
     def change_state(self, new_state):
         self.current_state = self.game_states_dict[new_state]
@@ -44,14 +45,14 @@ class Game:
     def run(self):
         while True:
             # ---- EVENTS ----
-            for event in pg.event.get():
+            events = pg.event.get()
+            self.input_handler.update(events)
+            for event in events:
                 if event.type == pg.QUIT:
                     pg.quit()
-                    exit()
-                
+                    exit()                
                 self.current_state.handle_event(event)
             
-            self.input_handler.update()
             # ---- UPDATE ----
             self.current_state.update()
 

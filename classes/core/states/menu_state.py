@@ -13,12 +13,12 @@ class MenuState(GameState):
         self.menu = MainMenu(game.sound_manager)
 
     def handle_event(self, event):
-        if event.type == pg.KEYDOWN:
-            if event.key in (pg.K_DOWN, pg.K_s):
+        if event.type == pg.KEYDOWN or event.type == pg.JOYHATMOTION or  event.type == pg.JOYBUTTONDOWN:
+            if self.game.input_handler.is_pressed(constants.INPUT_DOWN):
                 self.menu.index_inc()
-            elif event.key in (pg.K_UP, pg.K_w):
+            elif self.game.input_handler.is_pressed(constants.INPUT_UP):
                 self.menu.index_dec()
-            elif event.key == pg.K_RETURN:
+            elif self.game.input_handler.is_pressed(constants.INPUT_SELECT):
                 self.menu.handleMenuSelect()
     
         # checks if the mouse is placed in a menu option
