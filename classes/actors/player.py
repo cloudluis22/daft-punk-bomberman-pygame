@@ -182,7 +182,6 @@ class Player(pygame.sprite.Sprite):
         if len(self.bomb_group) == 0 and len(self.explosion_group) == 0:
             self.bomb_counter = 0
 
-
         if self.invincible:
             now = pygame.time.get_ticks()
             if now - self.invincible_time > self.invincible_duration:

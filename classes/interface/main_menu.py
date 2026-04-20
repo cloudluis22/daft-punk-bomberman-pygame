@@ -35,6 +35,7 @@ class MainMenu():
         self.selected_index = None
         self.mouse_pos = None
         self.canClick = False
+        self.mouseMode = False
 
         self.option_selected = False # Purpose: prevent any more input once an option is choosed
         self.game_started = False
@@ -138,14 +139,16 @@ class MainMenu():
         if self.game_started == False: 
             menu_surface.blit(self.menu_logo, self.menu_logo_rect) # logo is wiped out too
             for element in self.menu_elements_rendered_dict:
-                # This conditional checks mouse hovering
-                if(element["rect"].collidepoint(self.mouse_pos)):
-                    # We check if the element is clickable or not
-                    if(element["clickable"] == True):
-                        self.canClick = True
-                        self.change_selected_index(element["index"])
-                    else:
-                        self.canClick = False
+                # Must be in mouse mode
+                if self.mouseMode:
+                    # This conditional checks mouse hovering
+                    if(element["rect"].collidepoint(self.mouse_pos)):
+                        # We check if the element is clickable or not
+                        if(element["clickable"] == True):
+                            self.canClick = True
+                            self.change_selected_index(element["index"])
+                        else:
+                            self.canClick = False
 
                 menu_surface.blit(element["text"], element["rect"])
 

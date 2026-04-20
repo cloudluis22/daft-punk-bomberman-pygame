@@ -20,11 +20,13 @@ class MenuState(GameState):
                 self.menu.index_dec()
             elif self.game.input_handler.is_pressed(constants.INPUT_SELECT):
                 self.menu.handleMenuSelect()
+            
+            self.menu.mouseMode = False
     
         # checks if the mouse is placed in a menu option
         elif event.type == pg.MOUSEBUTTONDOWN:
-            if self.menu.canClick:
-                self.menu.handleMenuSelect()
+                if self.menu.canClick:
+                    self.menu.handleMenuSelect()
 
         if event.type == constants.EV_MENU_SELECTED:
             self.menu.game_started = True
@@ -36,6 +38,9 @@ class MenuState(GameState):
 
         if event.type == constants.EV_SCREEN_BLACKOUT:
             self.game.change_state(constants.STATE_LVL_START)
+
+        if event.type == pg.MOUSEMOTION:
+            self.menu.mouseMode = True
             
     def update(self):
         pass
