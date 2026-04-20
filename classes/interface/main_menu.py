@@ -86,16 +86,17 @@ class MainMenu():
             self.selected_index = new_index
 
     def handleMenuSelect(self):
-        match self.selected_index:
-            case 0:
-                self.sound_manager.play_sound("sfx_menu_select")
-                self.option_selected = True
-                evt_menu_selected = pg.event.Event(constants.EV_MENU_SELECTED)
-                pg.time.set_timer(evt_menu_selected, 500, loops=1)
+        if not self.option_selected:
+            match self.selected_index:
+                case 0:
+                    self.sound_manager.play_sound("sfx_menu_select")
+                    self.option_selected = True
+                    evt_menu_selected = pg.event.Event(constants.EV_MENU_SELECTED)
+                    pg.time.set_timer(evt_menu_selected, 500, loops=1)
 
-            case 2:
-                pg.quit()
-                exit()
+                case 2:
+                    pg.quit()
+                    exit()
 
     # functions for increasing, decreasing menu index
     def index_inc(self):

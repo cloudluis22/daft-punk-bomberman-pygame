@@ -48,4 +48,3 @@ class MenuState(GameState):
     def draw(self, screen):
         surface, rect = self.menu.draw_menu()
         screen.blit(surface, rect)
-        
