@@ -100,7 +100,6 @@ class MainMenu():
 
     # functions for increasing, decreasing menu index
     def index_inc(self):
- 
         if(self.selected_index == None):
             self.change_selected_index(0)
         else:

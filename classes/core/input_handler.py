@@ -24,7 +24,8 @@ class InputHandler:
 
         self.joy_bindings = {
             0: constants.INPUT_SELECT,
-            2: constants.INPUT_DROP_BOMB
+            2: constants.INPUT_DROP_BOMB,
+            7: constants.INPUT_PAUSE,
         }
 
         self.actions = {
