@@ -20,10 +20,9 @@ class LevelRunningState(GameState):
             self.canRun = True
 
     def update(self):
-        pass
+        if self.game.input_handler.is_pressed(constants.INPUT_PAUSE):
+            self.game.change_state(constants.STATE_PAUSE)
                       
     def draw(self, screen):
       if self.canRun:
             self.game.level_manager.update_level()
-        
-        

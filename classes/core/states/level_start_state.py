@@ -23,7 +23,7 @@ class LevelStartState(GameState):
             self.lvlStartTxt.isShowing = True
 
         if event.type == constants.EV_LEVEL_IGNITE:
-            self.game.change_state(constants.STATE_GAME)
+            self.game.change_state(constants.STATE_GAME, True)
 
     def update(self):
         self.lvlStartTxt.move_text()            

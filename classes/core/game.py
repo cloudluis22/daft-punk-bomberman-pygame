@@ -9,7 +9,7 @@ from classes.interface.transition_manager import TransitionManager
 from classes.core.states.menu_state import MenuState
 from classes.core.states.level_start_state import LevelStartState
 from classes.core.states.level_running_state import LevelRunningState
-
+from classes.core.states.pause_state import PauseState
 
 # This class serves as a core class that handles all game behaviour in a single
 # easily accesible class, allowing for easier feature implementations.
@@ -32,15 +32,17 @@ class Game:
             constants.STATE_MENU: MenuState(self),
             constants.STATE_LVL_START: LevelStartState(self),
             constants.STATE_GAME: LevelRunningState(self),
+            constants.STATE_PAUSE: PauseState(self)
         }
 
         # Initialized default with the first state.
         self.current_state = self.game_states_dict[constants.STATE_MENU]
         self.events= {}
     
-    def change_state(self, new_state):
+    def change_state(self, new_state, do_on_enter=False):
         self.current_state = self.game_states_dict[new_state]
-        self.current_state.on_enter_state()
+        if do_on_enter:
+            self.current_state.on_enter_state()
 
     def run(self):
         while True:

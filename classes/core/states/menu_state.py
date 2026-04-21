@@ -37,7 +37,7 @@ class MenuState(GameState):
             self.game.level_index = event.level_index
 
         if event.type == constants.EV_SCREEN_BLACKOUT:
-            self.game.change_state(constants.STATE_LVL_START)
+            self.game.change_state(constants.STATE_LVL_START, True)
 
         if event.type == pg.MOUSEMOTION:
             self.menu.mouseMode = True

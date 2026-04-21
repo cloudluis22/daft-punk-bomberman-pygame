@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 
 class PauseState(GameState):
     def __init__(self, game: "Game"):
-        self.game = self.game
+        self.game = game
         self.pause_menu = PauseMenu(game.sound_manager)
     
     def handle_event(self, event):
@@ -21,18 +21,19 @@ class PauseState(GameState):
             elif self.game.input_handler.is_pressed(constants.INPUT_SELECT):
                 self.pause_menu.handlePauseMenuSelect()
 
-            self.menu.mouseMode = False
+            self.pause_menu.mouseMode = False
 
         # checks if the mouse is placed in a menu option
         elif event.type == pg.MOUSEBUTTONDOWN:
-                if self.menu.canClick:
-                    self.menu.handlePauseMenuSelect()
+                if self.pause_menu.canClick:
+                    self.pause_menu.handlePauseMenuSelect()
             
         if event.type == pg.MOUSEMOTION:
-            self.menu.mouseMode = True
+            self.pause_menu.mouseMode = True
 
     def update(self):
-        pass
+        if self.game.input_handler.is_pressed(constants.INPUT_PAUSE):
+            self.game.change_state(constants.STATE_GAME)
 
     def draw(self, screen):
         surface, rect = self.pause_menu.draw_pause_menu()

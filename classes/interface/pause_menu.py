@@ -15,7 +15,7 @@ class PauseMenu():
 
         self.surface = pg.Surface((self.width, self.height), pg.SRCALPHA)
         self.surface.fill((0, 0, 0, 180))
-        self.rect = self.surface.get_rect()
+        self.rect = self.surface.get_rect(center=(constants.SCREEN_WIDTH / 2, constants.SCREEN_HEIGHT / 2))
     
         self.font_lg = pg.font.Font(pixel_font_path, 80)
         self.font = pg.font.Font(pixel_font_path, 40)
@@ -42,7 +42,7 @@ class PauseMenu():
             txt_rect = txt_surf.get_rect(center=element['pos'])
             txt_clickable = element["clickable"]
             txt_index = element["index"]
-            self.menu_elements_rendered_dict.append({'text': txt_surf,
+            self.pause_menu_elements_rendered_dict.append({'text': txt_surf,
                                                      'text_selected':  txt_surf_selected,
                                                      'rect': txt_rect,
                                                      'clickable': txt_clickable,
@@ -82,11 +82,11 @@ class PauseMenu():
 
     def draw_pause_menu(self):
 
-        menu_surface = self.surface
-        menu_rect = self.rect
+        pause_menu_surface = self.surface
+        pause_menu_rect = self.rect
         self.mouse_pos = pg.mouse.get_pos()
 
-        for element in self.menu_elements_rendered_dict:
+        for element in self.pause_menu_elements_rendered_dict:
             # Must be in mouse mode
             if self.mouseMode:
                 # This conditional checks mouse hovering
@@ -98,8 +98,10 @@ class PauseMenu():
                     else:
                         self.canClick = False
     
-            menu_surface.blit(element["text"], element["rect"])
+            pause_menu_surface.blit(element["text"], element["rect"])
 
             # This checks for the selected index, making the selecting behaviour independent from mouse hovering and button pressing.
             if(self.selected_index != None and self.selected_index == element["index"]):
-                menu_surface.blit(element["text_selected"], element["rect"])
+                pause_menu_surface.blit(element["text_selected"], element["rect"])
+
+        return pause_menu_surface, pause_menu_rect 
