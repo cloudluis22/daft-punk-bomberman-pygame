@@ -41,6 +41,11 @@ EV_MAP_LOADED = pg.event.custom_type()
 EV_START_CINEMATIC = pg.event.custom_type()
 EV_LEVEL_IGNITE = pg.event.custom_type()
 EV_LEVEL_RUN = pg.event.custom_type()
+EV_LEVEL_RESUME = pg.event.custom_type()
+EV_LEVEL_RESTART = pg.event.custom_type()
+EV_LEVEL_QUIT = pg.event.custom_type()
+
+
 
 ################################################################################
 # INPUT

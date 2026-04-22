@@ -56,3 +56,5 @@ class LevelStartText():
         if self.txt_rect.x >= self.rect.right + 100:
             evt_lvl_ignite = pg.event.Event(constants.EV_LEVEL_IGNITE)
             pg.event.post(evt_lvl_ignite)
+            self.txt_rect.x = self.rect.left - 2000
+            self.wasShowed = False

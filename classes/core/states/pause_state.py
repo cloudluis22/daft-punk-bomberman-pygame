@@ -11,6 +11,7 @@ class PauseState(GameState):
     def __init__(self, game: "Game"):
         self.game = game
         self.pause_menu = PauseMenu(game.sound_manager)
+        self.quit = False
     
     def handle_event(self, event):
         if event.type == pg.KEYDOWN or event.type == pg.JOYHATMOTION or  event.type == pg.JOYBUTTONDOWN:
@@ -30,6 +31,36 @@ class PauseState(GameState):
             
         if event.type == pg.MOUSEMOTION:
             self.pause_menu.mouseMode = True
+
+        if event.type == constants.EV_LEVEL_RESUME:
+            self.game.change_state(constants.STATE_GAME)
+
+        if event.type == constants.EV_LEVEL_RESTART:
+            event = pg.event.Event(
+                constants.EV_TRANSITION,
+                level_index = self.game.level_index # same index, means restarting
+            )
+            pg.event.post(event)
+
+        if event.type == constants.EV_LEVEL_QUIT:
+            self.game.sound_manager.stop_music_fadeout()
+            self.quit = True
+            event = pg.event.Event(
+                constants.EV_TRANSITION,
+                level_index = 1
+            )
+            pg.event.post(event)
+        
+        if event.type == constants.EV_TRANSITION:
+            self.game.transition_manager.transition_fade_out()
+            self.game.level_index = event.level_index
+
+        if event.type == constants.EV_SCREEN_BLACKOUT:
+            self.game.level_manager.unload_level()
+            if not self.quit:
+                self.game.change_state(constants.STATE_LVL_START, True)
+            else:
+                self.game.change_state(constants.STATE_MENU, True)
 
     def update(self):
         if self.game.input_handler.is_pressed(constants.INPUT_PAUSE):

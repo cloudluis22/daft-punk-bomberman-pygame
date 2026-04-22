@@ -113,11 +113,26 @@ class MainMenu():
             if(self.selected_index > 0):
                 self.change_selected_index(self.selected_index - 1)
 
+    def reset_menu(self):
+        self.game_started = False
+        self.moving_heads = True
+        self.played_menu_music = False
+        self.option_selected = False
+
+        self.h_graphic_thomas_rect = self.h_graphic_thomas.get_rect()
+        self.h_graphic_thomas_rect.left = self.rect.left + 25
+        self.h_graphic_thomas_rect.centery = self.rect.centery
+
+        self.h_graphic_guy_rect = self.h_graphic_guy.get_rect()
+        self.h_graphic_guy_rect.right = self.rect.right - 25
+        self.h_graphic_guy_rect.centery = self.rect.centery
+
     def draw_menu(self):
 
-        if self.played_menu_music == False:
+        if not self.played_menu_music:
           self.sound_manager.play_music("mus_menu")
-          self.played_menu_music = True
+          if self.sound_manager.is_track_playing:
+            self.played_menu_music = True
 
         menu_surface = self.surface
         menu_rect = self.rect
@@ -136,7 +151,7 @@ class MainMenu():
 
         # blitting text 
         # if game is about to start then wipe the text for the cinematic
-        if self.game_started == False: 
+        if not self.game_started: 
             menu_surface.blit(self.menu_logo, self.menu_logo_rect) # logo is wiped out too
             for element in self.menu_elements_rendered_dict:
                 # Must be in mouse mode

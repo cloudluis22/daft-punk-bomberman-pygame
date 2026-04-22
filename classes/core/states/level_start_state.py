@@ -14,6 +14,7 @@ class LevelStartState(GameState):
         self.lvlStartTxt = LevelStartText(self.game.level_index)
 
     def on_enter_state(self):
+        self.hasLoadedLevel = False
         self.game.level_manager.load_level(self.game.level_index)
         
     def handle_event(self, event):

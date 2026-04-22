@@ -104,6 +104,16 @@ class LevelManager():
         event_loaded = pg.event.Event(constants.EV_MAP_LOADED)
         pg.event.post(event_loaded)
 
+    def unload_level(self):
+        self.current_tilemap = []
+        self.collision_tiles = []
+        self.current_tiles = []
+        self.rects_map = []
+        self.map_surface = None
+        self.current_bg = ""
+        self.player_group.empty()
+        self.enemies_group.empty()
+
     def level_start(self, level):
         self.spawn_entities()
         player = self.player_group.sprites()[0]

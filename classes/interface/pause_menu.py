@@ -59,12 +59,16 @@ class PauseMenu():
             match self.selected_index:
                 case 0:
                     self.sound_manager.play_sound("sfx_menu_select")
-                    self.option_selected = True
-                    print("game resumed")
+                    event = pg.event.Event(constants.EV_LEVEL_RESUME)
+                    pg.event.post(event)
                 case 1:
-                    print("game restarted")
+                    self.sound_manager.play_sound("sfx_menu_select")
+                    event = pg.event.Event(constants.EV_LEVEL_RESTART)
+                    pg.event.post(event)                
                 case 2:
-                    print("quit to menu")
+                    event = self.sound_manager.play_sound("sfx_menu_select")
+                    event = pg.event.Event(constants.EV_LEVEL_QUIT)
+                    pg.event.post(event)
 
     # functions for increasing, decreasing menu index
     def index_inc(self):

@@ -12,8 +12,10 @@ class MenuState(GameState):
         self.game = game
         self.menu = MainMenu(game.sound_manager)
 
+    # This executes in case player exits to main menu from a level.
     def on_enter_state(self):
-        pass
+        self.menu.reset_menu()
+        self.game.transition_manager.transition_fade_in()
     
     def handle_event(self, event):
         if event.type == pg.KEYDOWN or event.type == pg.JOYHATMOTION or  event.type == pg.JOYBUTTONDOWN:
