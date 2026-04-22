@@ -15,6 +15,50 @@ TM_HEIGHT = 13
 TM_Y_OFFSET = 30
 
 ################################################################################
+# GAME STATE
+################################################################################
+STATE_MENU = "MAIN MENU"
+STATE_LVL_START = "LEVEL START"
+STATE_GAME = "GAME"
+STATE_PAUSE = "PAUSE"
+STATE_GAME_OVER = "GAME OVER"
+
+################################################################################
+# TRANSITION STATES
+################################################################################
+T_STATE_IDLE = "IDLE"
+T_STATE_FADING_OUT = "FADING_OUT"
+T_STATE_BLACKOUT = "BLACKOUT"
+T_STATE_FADING_IN = "FADING_IN"
+
+################################################################################
+# GAME EVENTS
+################################################################################
+EV_MENU_SELECTED = pg.event.custom_type()
+EV_TRANSITION = pg.event.custom_type()
+EV_SCREEN_BLACKOUT = pg.event.custom_type()
+EV_MAP_LOADED = pg.event.custom_type()
+EV_START_CINEMATIC = pg.event.custom_type()
+EV_LEVEL_IGNITE = pg.event.custom_type()
+EV_LEVEL_RUN = pg.event.custom_type()
+EV_LEVEL_RESUME = pg.event.custom_type()
+EV_LEVEL_RESTART = pg.event.custom_type()
+EV_LEVEL_QUIT = pg.event.custom_type()
+
+
+
+################################################################################
+# INPUT
+################################################################################
+INPUT_UP = "UP"
+INPUT_DOWN = "DOWN"
+INPUT_LEFT = "LEFT"
+INPUT_RIGHT = "RIGHT"
+INPUT_SELECT = "SELECT"
+INPUT_PAUSE = "PAUSE"
+INPUT_DROP_BOMB = "DROP_BOMB"
+
+################################################################################
 # TILEMAPS
 ################################################################################
 # SCHEME:

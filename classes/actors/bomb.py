@@ -34,7 +34,7 @@ def get_explosion_tiles(tilemap, bomb_x, bomb_y, radius=1):
 
 class Bomb(pygame.sprite.Sprite):
 
-    def __init__(self, x, y, tile_x, tile_y, tilemap, offset_x, offset_y, tile_size, explosion_group, update_tm, sound_manager):
+    def __init__(self, x, y, tile_x, tile_y, tilemap, offset_x, offset_y, tile_size, explosion_group, update_tm, sound_manager, input_handler):
         super().__init__()
 
         self.image = pygame.image.load("assets/graphics/sprites/bomb/bomb_1.png").convert_alpha()
@@ -58,6 +58,8 @@ class Bomb(pygame.sprite.Sprite):
 
         self.update_tm = update_tm
 
+        self.input_handler = input_handler
+
     def update(self):
 
         self.timer -= 1
@@ -65,6 +67,7 @@ class Bomb(pygame.sprite.Sprite):
         if self.timer <= 0:
             self.explode()
             self.sound_manager.play_sound("sfx_explosion")
+            self.input_handler.low_freq_rumble()
             self.kill()
 
     def explode(self):
@@ -72,7 +75,6 @@ class Bomb(pygame.sprite.Sprite):
         affected_tiles = get_explosion_tiles(self.tilemap, self.tile_x, self.tile_y, 2)
 
         for x, y in affected_tiles:
-
             px = self.offset_x + x * self.tile_size + self.tile_size // 2
             py = self.offset_y + y * self.tile_size + self.tile_size // 2
 

@@ -32,29 +32,27 @@ def player_input(self):
     self.vx = 0
     self.vy = 0
 
-    if keys[pygame.K_w] or keys[pygame.K_UP]:
+    if self.input_handler.is_active(constants.INPUT_UP):
         self.direction = 'FW'
         self.vy = -self.speed
         self.moving = True
 
-    if keys[pygame.K_s] or keys[pygame.K_DOWN]:
+    if self.input_handler.is_active(constants.INPUT_DOWN):
         self.direction = 'BW'
         self.vy = self.speed
         self.moving = True
 
-    if keys[pygame.K_a] or keys[pygame.K_LEFT]:
+    if self.input_handler.is_active(constants.INPUT_LEFT):
         self.direction = 'LW'
         self.vx = -self.speed
         self.moving = True
 
-    if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
+    if self.input_handler.is_active(constants.INPUT_RIGHT):
         self.direction = 'RW'
         self.vx = self.speed
         self.moving = True
 
-    if not any(keys[k] for k in (
-        pygame.K_w, pygame.K_a, pygame.K_s, pygame.K_d,
-        pygame.K_UP, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_DOWN)):
+    if not any(action["active"] for action in self.input_handler.actions.values()):
         self.moving = False
 
 def check_tile_collision(self):
@@ -108,8 +106,6 @@ def player_animation(self, FW, BW, LW, RW):
             case 'RW':
                 self.image = RW[int(self.anim_index)]
                 
-    self.image = pygame.transform.scale(self.image, (32, 35))
-
 def take_damage(self):
     if self.damage_flag:
         if not self.invincible:
@@ -117,35 +113,33 @@ def take_damage(self):
             self.invincible = True
             self.invincible_time = pygame.time.get_ticks()
             self.sound_manager.play_sound("sfx_player_hit")
+            self.input_handler.high_freq_rumble()
 
     self.damage_flag = False
 
 def bomb_spawning(self):
 
     if self.bomb_counter < 2:
-        keys = pygame.key.get_just_pressed()
-        if keys[pygame.K_SPACE]:
-
+        if self.input_handler.is_pressed(constants.INPUT_DROP_BOMB):
             tile_x = (self.rect.centerx - self.offset_x) // TILE_SIZE
             tile_y = (self.rect.centery - self.offset_y) // TILE_SIZE
 
             x = self.offset_x + tile_x * TILE_SIZE + TILE_SIZE // 2
             y = self.offset_y + tile_y * TILE_SIZE + TILE_SIZE // 2
 
-            bomb = Bomb(x, y, tile_x, tile_y, TM_LVL1, self.offset_x, self.offset_y, TILE_SIZE, self.explosion_group, self.update_tilemap_def, self.sound_manager)
+            bomb = Bomb(x, y, tile_x, tile_y, TM_LVL1, self.offset_x, self.offset_y, TILE_SIZE, self.explosion_group, self.update_tilemap_def, self.sound_manager, self.input_handler)
             self.bomb_group.add(bomb)
             self.bomb_counter += 1
 
 class Player(pygame.sprite.Sprite):
 
-    def __init__(self, x, y, offset_x, offset_y, explosion_group, bomb_group, update_tilemap_def, rects_map, sound_manager):
+    def __init__(self, x, y, offset_x, offset_y, explosion_group, bomb_group, update_tilemap_def, rects_map, sound_manager, input_handler):
         super().__init__()
         self.ANIMS_FW = load_walking_anims('fw')
         self.ANIMS_BW = load_walking_anims('bw')
         self.ANIMS_LW = load_walking_anims('lw')
         self.ANIMS_RW = load_walking_anims('rw')
         self.image = self.ANIMS_BW[1]
-        self.image = pygame.transform.scale(self.image, (32, 35))
         self.direction = 'BW'
         self.moving = False
         self.speed = 2
@@ -156,6 +150,7 @@ class Player(pygame.sprite.Sprite):
         self.bomb_counter = 0
     
         self.rect = self.image.get_rect()
+        self.rect = self.rect.inflate(0, -4)
         self.rect.centerx = x
         self.rect.centery = y
         self.offset_x = offset_x
@@ -165,6 +160,7 @@ class Player(pygame.sprite.Sprite):
         self.update_tilemap_def = update_tilemap_def
         self.rects_map = rects_map
         self.sound_manager = sound_manager
+        self.input_handler = input_handler
 
         self.damage_flag = False
         self.invincible = False
@@ -185,7 +181,6 @@ class Player(pygame.sprite.Sprite):
 
         if len(self.bomb_group) == 0 and len(self.explosion_group) == 0:
             self.bomb_counter = 0
-
 
         if self.invincible:
             now = pygame.time.get_ticks()
