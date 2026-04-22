@@ -12,6 +12,9 @@ class MenuState(GameState):
         self.game = game
         self.menu = MainMenu(game.sound_manager)
 
+    def on_enter_state(self):
+        pass
+    
     def handle_event(self, event):
         if event.type == pg.KEYDOWN or event.type == pg.JOYHATMOTION or  event.type == pg.JOYBUTTONDOWN:
             if self.game.input_handler.is_pressed(constants.INPUT_DOWN):

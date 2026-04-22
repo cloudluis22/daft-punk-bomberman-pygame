@@ -36,14 +36,15 @@ class Game:
         }
 
         # Initialized default with the first state.
-        self.current_state = self.game_states_dict[constants.STATE_MENU]
+        self.current_state = self.game_states_dict[constants.STATE_LVL_START]
+        self.current_state.on_enter_state()
         self.events= {}
     
     def change_state(self, new_state, do_on_enter=False):
         self.current_state = self.game_states_dict[new_state]
         if do_on_enter:
             self.current_state.on_enter_state()
-
+    
     def run(self):
         while True:
             # ---- EVENTS ----

@@ -13,12 +13,13 @@ class PauseMenu():
         self.width = constants.SCREEN_WIDTH / 2 
         self.sound_manager = sound_manager
 
-        self.surface = pg.Surface((self.width, self.height), pg.SRCALPHA)
-        self.surface.fill((0, 0, 0, 180))
+        self.surface = pg.Surface((self.width, self.height))
+        self.surface.fill((0, 0, 0))
         self.rect = self.surface.get_rect(center=(constants.SCREEN_WIDTH / 2, constants.SCREEN_HEIGHT / 2))
-    
-        self.font_lg = pg.font.Font(pixel_font_path, 80)
-        self.font = pg.font.Font(pixel_font_path, 40)
+        self.inner_rect = self.surface.get_rect()
+
+        self.font_lg = pg.font.Font(pixel_font_path, 60)
+        self.font = pg.font.Font(pixel_font_path, 35)
 
         self.selected_index = None
         self.mouse_pos = None
@@ -28,10 +29,10 @@ class PauseMenu():
         self.option_selected = False
 
         menu_elements_dict = [
-            {'text': 'PAUSE', 'font': self.font_lg, 'pos': (self.rect.centerx, self.rect.centery - 60), "clickable": False, "index": None},
-            {'text': 'RESUME GAME', 'font': self.font, 'pos': (self.rect.centerx, self.rect.centery + 50), "clickable": True, "index":0},
-            {'text': 'RESTART LEVEL', 'font': self.font, 'pos': (self.rect.centerx, self.rect.centery + 100), "clickable": True, "index":1},
-            {'text': 'EXIT TO MENU', 'font': self.font, 'pos': (self.rect.centerx, self.rect.centery + 150), "clickable": True, "index":2},
+            {'text': 'PAUSE', 'font': self.font_lg, 'pos': (self.inner_rect.centerx, self.inner_rect.top + 50), "clickable": False, "index": None},
+            {'text': 'RESUME GAME', 'font': self.font, 'pos': (self.inner_rect.centerx, self.inner_rect.centery - 50), "clickable": True, "index":0},
+            {'text': 'RESTART LEVEL', 'font': self.font, 'pos': (self.inner_rect.centerx, self.inner_rect.centery), "clickable": True, "index":1},
+            {'text': 'EXIT TO MENU', 'font': self.font, 'pos': (self.inner_rect.centerx, self.inner_rect.centery + 50), "clickable": True, "index":2},
         ]
 
         self.pause_menu_elements_rendered_dict = []
@@ -82,15 +83,18 @@ class PauseMenu():
 
     def draw_pause_menu(self):
 
-        pause_menu_surface = self.surface
-        pause_menu_rect = self.rect
+       # self.surface.fill((0, 0, 0, 230))
+
+        menu_x, menu_y = self.rect.topleft
         self.mouse_pos = pg.mouse.get_pos()
 
+        adjusted_mouse_pos = (self.mouse_pos[0] - menu_x, self.mouse_pos[1] - menu_y)
+     
         for element in self.pause_menu_elements_rendered_dict:
             # Must be in mouse mode
             if self.mouseMode:
                 # This conditional checks mouse hovering
-                if(element["rect"].collidepoint(self.mouse_pos)):
+                if(element["rect"].collidepoint(adjusted_mouse_pos)):
                     # We check if the element is clickable or not
                     if(element["clickable"] == True):
                         self.canClick = True
@@ -98,10 +102,10 @@ class PauseMenu():
                     else:
                         self.canClick = False
     
-            pause_menu_surface.blit(element["text"], element["rect"])
+            self.surface.blit(element["text"], element["rect"])
 
             # This checks for the selected index, making the selecting behaviour independent from mouse hovering and button pressing.
             if(self.selected_index != None and self.selected_index == element["index"]):
-                pause_menu_surface.blit(element["text_selected"], element["rect"])
-
-        return pause_menu_surface, pause_menu_rect 
+                self.surface.blit(element["text_selected"], element["rect"]) 
+        
+        return self.surface, self.rect

@@ -33,6 +33,7 @@ class PauseState(GameState):
 
     def update(self):
         if self.game.input_handler.is_pressed(constants.INPUT_PAUSE):
+            self.game.sound_manager.play_sound("sfx_pause")
             self.game.change_state(constants.STATE_GAME)
 
     def draw(self, screen):
