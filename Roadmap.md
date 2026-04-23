@@ -12,15 +12,15 @@
 ## Phase 2
 - Tilemap optimization ✅
 - Improved collisions ✅
-- Better enemy logic (DISCARDED)
-- Improved UI
-- Sprites redesign
+- Better enemy logic __(DISCARDED)__
+- Improved UI ✅
+- Sprites redesign __1/2__
 
 ## Phase 3
-- Power-ups
+- Power-ups 
 - Time limit logic
 - Two additional levels (with proper sprites designed)
 - Boss logic for third level
 - Player progress
-- Controller support
-- Character selection
+- Controller support ✅
+- Character selection __(DISCARDED)__
