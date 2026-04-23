@@ -8,8 +8,9 @@ class InputHandler:
     def __init__(self):
         pg.joystick.init()
         self.joysticks = []
-        self.deadzone = 0.2
-        self.isUsingController = False
+        self.deadzone = 0.4
+        self.is_using_controller = False
+        self.stick_mode = True
 
         self.key_bindings = {
             pg.K_UP: constants.INPUT_UP,
@@ -53,13 +54,13 @@ class InputHandler:
 
         for event in events:
             if event.type == pg.KEYDOWN:
-                self.isUsingController = False
+                self.is_using_controller = False
                 if event.key in self.key_bindings:
                     action = self.key_bindings[event.key]
                     self.actions[action]["pressed"] = True
 
             if event.type == pg.JOYBUTTONDOWN:
-                self.isUsingController = True
+                self.is_using_controller = True
                 if event.button in self.joy_bindings:
                     action = self.joy_bindings[event.button]
                     self.actions[action]["pressed"] = True
@@ -70,7 +71,8 @@ class InputHandler:
                 print(f"Controller: {joy.get_name()} was just connected!")
             
             if event.type == pg.JOYHATMOTION:
-                self.isUsingController = True
+                self.is_using_controller = True
+                self.stick_mode = False
                 x, y = event.value
                 if x == -1: 
                     self.actions[constants.INPUT_LEFT]["pressed"] = True
@@ -92,8 +94,38 @@ class InputHandler:
                     self.actions[constants.INPUT_UP]["active"] = False
                     self.actions[constants.INPUT_DOWN]["active"] = False
 
+            if event.type == pg.JOYAXISMOTION:
+                
+                for joystick in self.joysticks:
+                    horizontal_movement = joystick.get_axis(0)
+                    vertical_movement = joystick.get_axis(1)
+
+                    if abs(horizontal_movement) > self.deadzone:
+                        self.stick_mode = True
+                        self.is_using_controller = True
+                        if horizontal_movement < 0:
+                            self.actions[constants.INPUT_LEFT]["active"] = True
+                        elif horizontal_movement > 0:
+                            self.actions[constants.INPUT_RIGHT]["active"] = True
+                    else:
+                        if self.stick_mode:
+                            self.actions[constants.INPUT_LEFT]["active"] = False
+                            self.actions[constants.INPUT_RIGHT]["active"] = False
+
+                    if abs(vertical_movement) > self.deadzone:
+                        self.stick_mode = True
+                        self.is_using_controller = True
+                        if vertical_movement < 0:
+                            self.actions[constants.INPUT_UP]["active"] = True
+                        elif vertical_movement > 0:
+                            self.actions[constants.INPUT_DOWN]["active"] = True
+                    else:
+                        if self.stick_mode:
+                            self.actions[constants.INPUT_UP]["active"] = False
+                            self.actions[constants.INPUT_DOWN]["active"] = False
+                    
         # Handling continuous input
-        if not self.isUsingController:
+        if not self.is_using_controller:
             keys = pg.key.get_pressed()
             for key, action in self.key_bindings.items():
                 self.actions[action]["active"] = keys[key]
