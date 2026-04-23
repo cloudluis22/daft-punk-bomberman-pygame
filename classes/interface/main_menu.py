@@ -100,18 +100,20 @@ class MainMenu():
 
     # functions for increasing, decreasing menu index
     def index_inc(self):
-        if(self.selected_index == None):
-            self.change_selected_index(0)
-        else:
-            if(self.selected_index < 2):
-                self.change_selected_index(self.selected_index + 1)
+        if not self.option_selected:
+            if(self.selected_index == None):
+                self.change_selected_index(0)
+            else:
+                if(self.selected_index < 2):
+                    self.change_selected_index(self.selected_index + 1)
 
     def index_dec(self):
-        if(self.selected_index == None):
-            self.change_selected_index(0)
-        else:
-            if(self.selected_index > 0):
-                self.change_selected_index(self.selected_index - 1)
+        if not self.option_selected:
+            if(self.selected_index == None):
+                self.change_selected_index(0)
+            else:
+                if(self.selected_index > 0):
+                    self.change_selected_index(self.selected_index - 1)
 
     def reset_menu(self):
         self.game_started = False

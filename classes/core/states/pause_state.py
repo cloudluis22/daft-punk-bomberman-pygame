@@ -17,15 +17,17 @@ class PauseState(GameState):
     def on_enter_state(self):
         self.quit = False
         self.option_selected = False
+        print("me ejecuto")
 
     def handle_event(self, event):
         if event.type == pg.KEYDOWN or event.type == pg.JOYHATMOTION or  event.type == pg.JOYBUTTONDOWN:
-            if self.game.input_handler.is_pressed(constants.INPUT_DOWN):
-                self.pause_menu.index_inc()
-            elif self.game.input_handler.is_pressed(constants.INPUT_UP):
-                self.pause_menu.index_dec()
-            elif self.game.input_handler.is_pressed(constants.INPUT_SELECT):
-                self.pause_menu.handlePauseMenuSelect()
+            if not self.option_selected:
+                if self.game.input_handler.is_pressed(constants.INPUT_DOWN):
+                    self.pause_menu.index_inc()
+                elif self.game.input_handler.is_pressed(constants.INPUT_UP):
+                    self.pause_menu.index_dec()
+                elif self.game.input_handler.is_pressed(constants.INPUT_SELECT):
+                    self.pause_menu.handlePauseMenuSelect()
 
             self.pause_menu.mouseMode = False
 
@@ -47,7 +49,6 @@ class PauseState(GameState):
                 level_index = self.game.level_index # same index, means restarting
             )
             pg.event.post(event)
-
 
         if event.type == constants.EV_LEVEL_QUIT:
             self.option_selected = True
