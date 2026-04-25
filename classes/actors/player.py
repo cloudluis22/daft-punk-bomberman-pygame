@@ -56,69 +56,81 @@ def player_input(self):
 
 def check_tile_collision(self):
 
-    # --- X movement ---
-    self.rect.x += self.vx
+    if not self.dead:
+        # --- X movement ---
+        self.rect.x += self.vx
 
-    for rect, tile in self.rects_map:
-        if self.rect.colliderect(rect):
+        for rect, tile in self.rects_map:
+            if self.rect.colliderect(rect):
 
-            if self.vx > 0:
-                self.rect.right = rect.left
+                if self.vx > 0:
+                    self.rect.right = rect.left
 
-            if self.vx < 0:
-                self.rect.left = rect.right
+                if self.vx < 0:
+                    self.rect.left = rect.right
 
-    # --- Y movement ---
-    self.rect.y += self.vy
+        # --- Y movement ---
+        self.rect.y += self.vy
 
-    for rect, tile in self.rects_map:
-        if self.rect.colliderect(rect):
+        for rect, tile in self.rects_map:
+            if self.rect.colliderect(rect):
 
-            if self.vy > 0:
-                self.rect.bottom = rect.top
+                if self.vy > 0:
+                    self.rect.bottom = rect.top
 
-            if self.vy < 0:
-                self.rect.top = rect.bottom
+                if self.vy < 0:
+                    self.rect.top = rect.bottom
        
 def player_animation(self, FW, BW, LW, RW):
 
-    if self.anim_index >= 4: self.anim_index = 0
+    if not self.dead:
+        if self.anim_index >= 4: self.anim_index = 0
 
-    if self.moving != True:
-        match self.direction:
-            case 'FW':
-                self.image = FW[1]
-            case 'BW':
-                self.image = BW[1] 
-            case 'LW':
-                self.image = LW[1]
-            case 'RW':
-                self.image = RW[1] 
+        if self.moving != True:
+            match self.direction:
+                case 'FW':
+                    self.image = FW[1]
+                case 'BW':
+                    self.image = BW[1] 
+                case 'LW':
+                    self.image = LW[1]
+                case 'RW':
+                    self.image = RW[1] 
+        else:
+            match self.direction:
+                case 'FW':
+                    self.image = FW[int(self.anim_index)]
+                case 'BW':
+                    self.image = BW[int(self.anim_index)] 
+                case 'LW':
+                    self.image = LW[int(self.anim_index)]
+                case 'RW':
+                    self.image = RW[int(self.anim_index)]
     else:
-        match self.direction:
-            case 'FW':
-                self.image = FW[int(self.anim_index)]
-            case 'BW':
-                self.image = BW[int(self.anim_index)] 
-            case 'LW':
-                self.image = LW[int(self.anim_index)]
-            case 'RW':
-                self.image = RW[int(self.anim_index)]
+        self.image = self.SPRT_DEAD[0]
                 
+#FIXME fix this
 def take_damage(self):
-    if self.damage_flag:
-        if not self.invincible:
-            self.lives -= 1
-            self.invincible = True
-            self.invincible_time = pygame.time.get_ticks()
+    if not self.damage_taken:
+        if self.damage_flag:
+            self.damage_taken = True
+            self.dead = True
+            self.dead_timer = pygame.time.get_ticks()
             self.sound_manager.play_sound("sfx_player_hit")
             self.input_handler.high_freq_rumble()
-    self.damage_flag = False
+            self.damage_flag = False
 
+def death_state(self):
+    if self.dead:
+        now = pygame.time.get_ticks()
+        if now - self.dead_timer > self.dead_duration:
+            self.player_respawn()
+            self.dead = False  
+    
 def invincible(self):
     if self.invincible:
         now = pygame.time.get_ticks()
-        if now - self.invincible_time > self.invincible_duration:
+        if now - self.invincible_timer > self.invincible_duration:
             self.invincible = False 
 
 def bomb_spawning(self):
@@ -152,6 +164,7 @@ class Player(pygame.sprite.Sprite):
         self.anim_index = 0
         self.collision_flags = COLLISION_FLAGS
         self.bomb_counter = 0
+        self.dead = False
     
         self.rect = self.image.get_rect()
         self.rect = self.rect.inflate(0, -4)
@@ -167,11 +180,24 @@ class Player(pygame.sprite.Sprite):
         self.input_handler = input_handler
 
         self.damage_flag = False
+        self.damage_taken = False
         self.invincible = True # Invincible at spawning
         self.lives = 3
-        self.invincible_time = 0
+        self.invincible_timer = 0
         self.invincible_duration = 2500
+        self.dead_timer = 0
+        self.dead_duration = 1500
+        self.spawn_x = x
+        self.spawn_y = y
         
+    def player_respawn(self):
+        self.rect.centerx = self.spawn_x
+        self.rect.centery = self.spawn_y
+        self.image = self.ANIMS_BW[1]
+        self.damage_taken = False
+        self.invincible_timer = pygame.time.get_ticks()
+        self.invincible = True
+
     def update(self, current_bomb_group, current_explosion_group, current_rects_map):
         check_tile_collision(self)
         self.anim_index += 0.1
@@ -183,6 +209,7 @@ class Player(pygame.sprite.Sprite):
         take_damage(self)
         bomb_spawning(self)
         invincible(self)
+        death_state(self)
 
         if len(self.bomb_group) == 0 and len(self.explosion_group) == 0:
             self.bomb_counter = 0
