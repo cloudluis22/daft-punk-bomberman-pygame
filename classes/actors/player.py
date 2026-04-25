@@ -15,7 +15,7 @@ COLLISION_FLAGS = {
     "bottom": False
 }
 
-def load_walking_anims(anim_type):
+def load_animations(anim_type):
     files = sorted(os.listdir(os.path.join(BASE_DIR, ANIMS_FOLDER)))
     anims_array = []
 
@@ -27,7 +27,6 @@ def load_walking_anims(anim_type):
     return anims_array
 
 def player_input(self):
-    keys = pygame.key.get_pressed()
 
     self.vx = 0
     self.vy = 0
@@ -114,7 +113,6 @@ def take_damage(self):
             self.invincible_time = pygame.time.get_ticks()
             self.sound_manager.play_sound("sfx_player_hit")
             self.input_handler.high_freq_rumble()
-
     self.damage_flag = False
 
 def invincible(self):
@@ -140,10 +138,11 @@ class Player(pygame.sprite.Sprite):
 
     def __init__(self, x, y, offset_x, offset_y, explosion_group, bomb_group, update_tilemap_def, rects_map, sound_manager, input_handler):
         super().__init__()
-        self.ANIMS_FW = load_walking_anims('fw')
-        self.ANIMS_BW = load_walking_anims('bw')
-        self.ANIMS_LW = load_walking_anims('lw')
-        self.ANIMS_RW = load_walking_anims('rw')
+        self.ANIMS_FW = load_animations('fw')
+        self.ANIMS_BW = load_animations('bw')
+        self.ANIMS_LW = load_animations('lw')
+        self.ANIMS_RW = load_animations('rw')
+        self.SPRT_DEAD = load_animations('dead')
         self.image = self.ANIMS_BW[1]
         self.direction = 'BW'
         self.moving = False
