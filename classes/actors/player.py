@@ -117,8 +117,13 @@ def take_damage(self):
 
     self.damage_flag = False
 
-def bomb_spawning(self):
+def invincible(self):
+    if self.invincible:
+        now = pygame.time.get_ticks()
+        if now - self.invincible_time > self.invincible_duration:
+            self.invincible = False 
 
+def bomb_spawning(self):
     if self.bomb_counter < 2:
         if self.input_handler.is_pressed(constants.INPUT_DROP_BOMB):
             tile_x = (self.rect.centerx - self.offset_x) // TILE_SIZE
@@ -163,7 +168,7 @@ class Player(pygame.sprite.Sprite):
         self.input_handler = input_handler
 
         self.damage_flag = False
-        self.invincible = False
+        self.invincible = True # Invincible at spawning
         self.lives = 3
         self.invincible_time = 0
         self.invincible_duration = 2500
@@ -178,11 +183,7 @@ class Player(pygame.sprite.Sprite):
         player_animation(self, self.ANIMS_FW, self.ANIMS_BW, self.ANIMS_LW, self.ANIMS_RW)
         take_damage(self)
         bomb_spawning(self)
+        invincible(self)
 
         if len(self.bomb_group) == 0 and len(self.explosion_group) == 0:
             self.bomb_counter = 0
-
-        if self.invincible:
-            now = pygame.time.get_ticks()
-            if now - self.invincible_time > self.invincible_duration:
-                self.invincible = False

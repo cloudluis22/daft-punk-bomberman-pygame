@@ -101,6 +101,7 @@ class LevelManager():
                                             self.offset_x, self.offset_y)
         
         self.map_surface = Tilemap.create_tilemap_surface(self.current_tilemap, constants.TILE_SIZE, self.current_tiles)
+
         event_loaded = pg.event.Event(constants.EV_MAP_LOADED)
         pg.event.post(event_loaded)
 
