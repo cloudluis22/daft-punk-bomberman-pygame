@@ -109,7 +109,6 @@ def player_animation(self, FW, BW, LW, RW):
     else:
         self.image = self.SPRT_DEAD[0]
                 
-#FIXME fix this
 def take_damage(self):
     if not self.damage_taken:
         if self.damage_flag:
@@ -124,8 +123,8 @@ def death_state(self):
     if self.dead:
         now = pygame.time.get_ticks()
         if now - self.dead_timer > self.dead_duration:
-            self.player_respawn()
             self.dead = False  
+            self.player_respawn()
     
 def invincible(self):
     if self.invincible:
@@ -195,6 +194,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.centery = self.spawn_y
         self.image = self.ANIMS_BW[1]
         self.damage_taken = False
+        self.damage_flag = False
         self.invincible_timer = pygame.time.get_ticks()
         self.invincible = True
 

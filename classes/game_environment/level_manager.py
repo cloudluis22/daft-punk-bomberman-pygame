@@ -145,11 +145,13 @@ class LevelManager():
 
         for explosion in self.explosion_group:
             if(player.rect.colliderect(explosion)):
-                player.damage_flag = True
+                if not player.invincible:
+                    player.damage_flag = True
         
         for enemy in self.enemies_group:
             if(player.rect.colliderect(enemy)):
-                player.damage_flag = True
+                if not player.invincible:
+                    player.damage_flag = True
 
         enemy_deaths = pg.sprite.groupcollide(self.enemies_group, self.explosion_group, True, False)
         if enemy_deaths:
