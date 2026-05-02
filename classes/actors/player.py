@@ -96,6 +96,10 @@ def check_tile_collision(self):
 
         # these ones take into account both x and y movement.
         for bomb in self.bomb_group:
+        # When spawning the bomb they will be walkable as long as the player
+        # collides with it but once they stop colliding the .walkable property of the
+        # bomb will become false and will never become true by any means so it
+        # becomes completely solid.
             if self.rect.colliderect(bomb.rect):
                 if not bomb.walkable:
                     if self.vx > 0:
@@ -137,6 +141,10 @@ def player_animation(self, FW, BW, LW, RW):
                     self.image = LW[int(self.anim_index)]
                 case 'RW':
                     self.image = RW[int(self.anim_index)]
+            
+            if self.anim_index % 2 == 0:
+                self.sound_manager.play_sound("sfx_footstep")
+
     else:
         self.image = self.SPRT_DEAD[0]
                 

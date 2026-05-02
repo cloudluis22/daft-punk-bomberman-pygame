@@ -17,6 +17,7 @@ sfx_paths_dict = {
     "sfx_menu_select": root_path / "assets" / "sound" / "sfx" / "menu-select.mp3",
     "sfx_game_start": root_path / "assets" / "sound" / "sfx" / "game-start.mp3",
     "sfx_pause": root_path / "assets" / "sound" / "sfx" / "pause.mp3",
+    "sfx_footstep": root_path / "assets" / "sound" / "sfx" / "footstep.mp3",
 }
 
 class SoundManager():
