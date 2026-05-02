@@ -13,7 +13,7 @@ def get_explosion_tiles(tilemap, bomb_x, bomb_y, radius=1):
     ]
 
     for dx, dy in directions:
-        for i in range(1, radius + 1):
+        for i in range(1, radius):
 
             x = bomb_x + dx * i
             y = bomb_y + dy * i

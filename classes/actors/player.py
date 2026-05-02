@@ -63,6 +63,20 @@ def check_tile_collision(self):
         for rect, tile in self.rects_map:
             if self.rect.colliderect(rect):
 
+                player_head = pygame.Rect(self.rect.topleft, (self.rect.width, self.rect.height // 3))
+                player_center =  pygame.Rect(0, 0, self.rect.width, self.rect.height // 3)
+                player_center.center = self.rect.center
+                
+                player_bottom =  pygame.Rect(0, 0, self.rect.width, self.rect.height // 3)
+                player_bottom.center = self.rect.bottomleft
+
+                if player_center.collidelist([items[0] for items in self.rects_map]) == -1:
+                    if player_head.colliderect(rect):
+                        self.vy += self.speed * 2
+
+                    if player_bottom.colliderect(rect):
+                        self.vy -= self.speed * 2
+                    
                 if self.vx > 0:
                     self.rect.right = rect.left
 
@@ -74,7 +88,7 @@ def check_tile_collision(self):
 
         for rect, tile in self.rects_map:
             if self.rect.colliderect(rect):
-
+                
                 if self.vy > 0:
                     self.rect.bottom = rect.top
 
@@ -117,6 +131,7 @@ def take_damage(self):
             self.dead_timer = pygame.time.get_ticks()
             self.sound_manager.play_sound("sfx_player_hit")
             self.input_handler.high_freq_rumble()
+            self.lives -= 1
             self.damage_flag = False
 
 def death_state(self):
@@ -166,7 +181,7 @@ class Player(pygame.sprite.Sprite):
         self.dead = False
     
         self.rect = self.image.get_rect()
-        self.rect = self.rect.inflate(0, -4)
+        self.rect.inflate_ip(0, -3)
         self.rect.centerx = x
         self.rect.centery = y
         self.offset_x = offset_x
