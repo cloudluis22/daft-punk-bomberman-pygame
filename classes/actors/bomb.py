@@ -59,6 +59,8 @@ class Bomb(pygame.sprite.Sprite):
         self.update_tm = update_tm
 
         self.input_handler = input_handler
+        
+        self.walkable = True
 
     def update(self):
 

@@ -82,19 +82,36 @@ def check_tile_collision(self):
 
                 if self.vx < 0:
                     self.rect.left = rect.right
-
+           
         # --- Y movement ---
         self.rect.y += self.vy
 
         for rect, tile in self.rects_map:
             if self.rect.colliderect(rect):
-                
-                if self.vy > 0:
-                    self.rect.bottom = rect.top
+                    if self.vy > 0:
+                        self.rect.bottom = rect.top
 
-                if self.vy < 0:
-                    self.rect.top = rect.bottom
-       
+                    if self.vy < 0:
+                        self.rect.top = rect.bottom
+
+        # these ones take into account both x and y movement.
+        for bomb in self.bomb_group:
+            if self.rect.colliderect(bomb.rect):
+                if not bomb.walkable:
+                    if self.vx > 0:
+                        self.rect.right = bomb.rect.left
+
+                    if self.vx < 0:
+                        self.rect.left = bomb.rect.right
+
+                    if self.vy > 0:
+                        self.rect.bottom = bomb.rect.top
+
+                    if self.vy < 0:
+                        self.rect.top = bomb.rect.bottom
+            else:
+                bomb.walkable = False
+        
 def player_animation(self, FW, BW, LW, RW):
 
     if not self.dead:
@@ -159,6 +176,7 @@ def bomb_spawning(self):
             bomb = Bomb(x, y, tile_x, tile_y, TM_LVL1, self.offset_x, self.offset_y, TILE_SIZE, self.explosion_group, self.update_tilemap_def, self.sound_manager, self.input_handler)
             self.bomb_group.add(bomb)
             self.bomb_counter += 1
+            self.bomb_spawned = True
 
 class Player(pygame.sprite.Sprite):
 
