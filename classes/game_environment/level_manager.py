@@ -114,6 +114,7 @@ class LevelManager():
         self.current_bg = ""
         self.player_group.empty()
         self.enemies_group.empty()
+        self.explosion_group.empty()
 
     def level_start(self, level):
         self.spawn_entities()
