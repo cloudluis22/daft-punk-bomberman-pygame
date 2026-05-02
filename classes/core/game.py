@@ -1,6 +1,9 @@
 import pygame as pg
 import constants
 from sys import exit
+import pygame as pg
+from pathlib import Path
+
 from classes.core.input_handler import InputHandler
 from classes.game_environment.sound_manager import SoundManager
 from classes.game_environment.level_manager import LevelManager
@@ -11,14 +14,21 @@ from classes.core.states.level_start_state import LevelStartState
 from classes.core.states.level_running_state import LevelRunningState
 from classes.core.states.pause_state import PauseState
 
+current_path = Path(__file__).parent
+root_path = current_path.parent.parent
+
+icon_path = root_path / "assets" / "graphics" / "icons" / "app_icon.png"
+
 # This class serves as a core class that handles all game behaviour in a single
 # easily accesible class, allowing for easier feature implementations.
 class Game:
     def __init__(self):
         pg.init()
 
-        self.screen = pg.display.set_mode((constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT)) 
+        self.screen = pg.display.set_mode((constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT))
+        self.app_icon = pg.image.load(icon_path).convert_alpha()
         pg.display.set_caption("Daft Punk Bomberman")
+        pg.display.set_icon(self.app_icon)
         self.clock = pg.time.Clock()
 
         self.input_handler = InputHandler()
