@@ -147,6 +147,11 @@ class LevelManager():
             if(player.rect.colliderect(explosion)):
                 if not player.invincible:
                     player.damage_flag = True
+
+            for bomb in self.bomb_group:
+                if explosion.rect.colliderect(bomb):
+                    bomb.explode()
+                    bomb.kill()
         
         for enemy in self.enemies_group:
             if(player.rect.colliderect(enemy)):
@@ -157,7 +162,7 @@ class LevelManager():
             for bomb in self.bomb_group:
                 if bomb.rect.colliderect(enemy):
                     enemy.collision(bomb.rect)
-
+        
         enemy_deaths = pg.sprite.groupcollide(self.enemies_group, self.explosion_group, True, False)
         if enemy_deaths:
             self.sound_manager.play_sound("sfx_enemy_hit")
