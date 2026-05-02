@@ -197,7 +197,7 @@ class Player(pygame.sprite.Sprite):
         self.damage_taken = False
         self.invincible = True # Invincible at spawning
         self.lives = 3
-        self.invincible_timer = 0
+        self.invincible_timer = pygame.time.get_ticks()
         self.invincible_duration = 2500
         self.dead_timer = 0
         self.dead_duration = 1500
