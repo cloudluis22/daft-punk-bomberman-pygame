@@ -23,16 +23,18 @@ class V_Enemy(pygame.sprite.Sprite):
         self.rect.y += self.direction * self.speed
 
         for rect, tile in self.rects_map:
-            if self.rect.colliderect(rect):
+            self.collision(rect)
 
-                if self.direction > 0:
-                    self.rect.bottom = rect.top
-                else:
-                    self.rect.top = rect.bottom
+    def collision(self, rect):
+        if self.rect.colliderect(rect):
 
-                self.direction *= -1
-                break
+            if self.direction > 0:
+                self.rect.bottom = rect.top
+            else:
+                self.rect.top = rect.bottom
 
+            self.direction *= -1
+              
         if self.direction < 0:
             self.image = self.images[0]
         else:

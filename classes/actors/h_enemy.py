@@ -22,16 +22,18 @@ class H_Enemy(pygame.sprite.Sprite):
         self.rect.x += self.direction * self.speed
 
         for rect, tile in self.rects_map:
-            if self.rect.colliderect(rect):
+            self.collision(rect)
+    
+    def collision(self, rect):
+        if self.rect.colliderect(rect):
 
-                if self.direction > 0:
-                    self.rect.right = rect.left
-                else:
-                    self.rect.left = rect.right
+            if self.direction > 0:
+                self.rect.right = rect.left
+            else:
+                self.rect.left = rect.right
 
-                self.direction *= -1
-                break
-
+            self.direction *= -1
+        
         if self.direction < 0:
             self.image = pygame.transform.flip(self.base_image, True, False)
         else:
