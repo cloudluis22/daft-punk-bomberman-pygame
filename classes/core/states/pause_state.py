@@ -1,7 +1,7 @@
 import pygame as pg
 import constants
 from classes.core.game_state import GameState
-from classes.interface.pause_menu import PauseMenu
+from classes.interface.game_menu import GameMenu
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 class PauseState(GameState):
     def __init__(self, game: "Game"):
         self.game = game
-        self.pause_menu = PauseMenu(game.sound_manager)
+        self.pause_menu = GameMenu(game.sound_manager)
         self.quit = False
         self.option_selected = False
 

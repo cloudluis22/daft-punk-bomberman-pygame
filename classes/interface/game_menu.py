@@ -7,7 +7,7 @@ root_path = current_path.parent.parent
 
 pixel_font_path = root_path / "assets" / "fonts" / "pixel_font.ttf"
 
-class PauseMenu():
+class GameMenu():
     def __init__(self, sound_manager):
         self.height = constants.SCREEN_HEIGHT / 2   # Half size
         self.width = constants.SCREEN_WIDTH / 2 

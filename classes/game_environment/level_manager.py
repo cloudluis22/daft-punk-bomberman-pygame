@@ -48,6 +48,7 @@ class LevelManager():
         # GAME RELATED VARIABLES
         self.score = 0
         self.time = 60
+        self.game_over = False
 
     def spawn_entities(self):
         for row_index, row in enumerate(self.current_tilemap):
@@ -136,6 +137,12 @@ class LevelManager():
             self.time = 0
 
         player = self.player_group.sprites()[0]
+
+        if player.lives <= 0 or self.time <= 0:
+            self.game_over = True
+
+        if self.game_over:
+            print("GAME OVER YEAHH")
 
         self.screen.blit(self.current_bg, (0, 0))
         self.screen.blit(self.map_surface, (self.offset_x, self.offset_y))
