@@ -39,7 +39,7 @@ class Bomb(pygame.sprite.Sprite):
 
         self.image = pygame.image.load("assets/graphics/sprites/bomb/bomb_1.png").convert_alpha()
         self.rect = self.image.get_rect(center=(x, y))
-
+    
         self.tile_x = tile_x
         self.tile_y = tile_y
 

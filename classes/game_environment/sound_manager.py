@@ -18,6 +18,7 @@ sfx_paths_dict = {
     "sfx_game_start": root_path / "assets" / "sound" / "sfx" / "game-start.mp3",
     "sfx_pause": root_path / "assets" / "sound" / "sfx" / "pause.mp3",
     "sfx_footstep": root_path / "assets" / "sound" / "sfx" / "footstep.mp3",
+    "sfx_bomb": root_path / "assets" / "sound" / "sfx" / "bomb.mp3",
 }
 
 class SoundManager():

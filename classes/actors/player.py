@@ -32,30 +32,34 @@ def player_input(self):
     self.vy = 0
 
     if self.input_handler.is_active(constants.INPUT_UP):
-        self.direction = 'FW'
-        self.vy = -self.speed
-        self.moving = True
+        if not self.block_up_down_movement:    
+            self.direction = 'FW'
+            self.vy = -self.speed
+            self.moving = True
 
     if self.input_handler.is_active(constants.INPUT_DOWN):
-        self.direction = 'BW'
-        self.vy = self.speed
-        self.moving = True
+        if not self.block_up_down_movement: 
+            self.direction = 'BW'
+            self.vy = self.speed
+            self.moving = True
 
     if self.input_handler.is_active(constants.INPUT_LEFT):
-        self.direction = 'LW'
-        self.vx = -self.speed
-        self.moving = True
+        if not self.block_side_movement:
+            self.direction = 'LW'
+            self.vx = -self.speed
+            self.moving = True
 
     if self.input_handler.is_active(constants.INPUT_RIGHT):
-        self.direction = 'RW'
-        self.vx = self.speed
-        self.moving = True
+        if not self.block_side_movement:
+            self.direction = 'RW'
+            self.vx = self.speed
+            self.moving = True
 
     if not any(action["active"] for action in self.input_handler.actions.values()):
         self.moving = False
 
 def check_tile_collision(self):
-
+ 
     if not self.dead:
         # --- X movement ---
         self.rect.x += self.vx
@@ -71,12 +75,15 @@ def check_tile_collision(self):
                 player_bottom.center = self.rect.bottomleft
 
                 if player_center.collidelist([items[0] for items in self.rects_map]) == -1:
-                    if player_head.colliderect(rect):
-                        self.vy += self.speed * 2
+                    # This bugs player cords when touching bombs so only if its not
+                    # touching them.
+                    if not self.touching_bomb:
+                        if player_head.colliderect(rect):
+                            self.vy += self.speed * 2
 
-                    if player_bottom.colliderect(rect):
-                        self.vy -= self.speed * 2
-                    
+                        if player_bottom.colliderect(rect):
+                            self.vy -= self.speed * 2
+            
                 if self.vx > 0:
                     self.rect.right = rect.left
 
@@ -102,20 +109,33 @@ def check_tile_collision(self):
         # becomes completely solid.
             if self.rect.colliderect(bomb.rect):
                 if not bomb.walkable:
-                    if self.vx > 0:
-                        self.rect.right = bomb.rect.left
 
+                    # these two conditionals prevents clipping.
+                    if self.direction == "BW" or self.direction == "FW":
+                        self.block_side_movement = True
+
+                    if self.direction == "LW" or self.direction == "RW":
+                        self.block_up_down_movement = True                    
+
+                    if self.vx > 0 :
+                        self.rect.right = bomb.rect.left
+                 
                     if self.vx < 0:
                         self.rect.left = bomb.rect.right
 
                     if self.vy > 0:
                         self.rect.bottom = bomb.rect.top
-
+                
                     if self.vy < 0:
                         self.rect.top = bomb.rect.bottom
+                    
+                self.touching_bomb = True
             else:
                 bomb.walkable = False
-        
+                self.touching_bomb = False
+                self.block_side_movement = False
+                self.block_up_down_movement = False
+
 def player_animation(self, FW, BW, LW, RW):
 
     if not self.dead:
@@ -185,6 +205,7 @@ def bomb_spawning(self):
             self.bomb_group.add(bomb)
             self.bomb_counter += 1
             self.bomb_spawned = True
+            self.sound_manager.play_sound("sfx_bomb")
 
 class Player(pygame.sprite.Sprite):
 
@@ -205,7 +226,10 @@ class Player(pygame.sprite.Sprite):
         self.collision_flags = COLLISION_FLAGS
         self.bomb_counter = 0
         self.dead = False
-    
+        self.touching_bomb = False
+        self.block_side_movement = False
+        self.block_up_down_movement = False
+
         self.rect = self.image.get_rect()
         self.rect.inflate_ip(0, -3)
         self.rect.centerx = x
