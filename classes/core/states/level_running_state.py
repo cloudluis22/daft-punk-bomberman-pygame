@@ -18,6 +18,9 @@ class LevelRunningState(GameState):
     def handle_event(self, event):
         if event.type == constants.EV_LEVEL_RUN:
             self.canRun = True
+        
+        if event.type == constants.EV_LEVEL_TIME_PASSING:
+            self.game.level_manager.time -= 1
 
     def update(self):
         if self.game.input_handler.is_pressed(constants.INPUT_PAUSE):

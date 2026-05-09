@@ -44,8 +44,7 @@ EV_LEVEL_RUN = pg.event.custom_type()
 EV_LEVEL_RESUME = pg.event.custom_type()
 EV_LEVEL_RESTART = pg.event.custom_type()
 EV_LEVEL_QUIT = pg.event.custom_type()
-
-
+EV_LEVEL_TIME_PASSING = pg.event.custom_type()
 
 ################################################################################
 # INPUT

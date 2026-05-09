@@ -17,8 +17,7 @@ class PauseState(GameState):
     def on_enter_state(self):
         self.quit = False
         self.option_selected = False
-        print("me ejecuto")
-
+      
     def handle_event(self, event):
         if event.type == pg.KEYDOWN or event.type == pg.JOYHATMOTION or  event.type == pg.JOYBUTTONDOWN:
             if not self.option_selected:

@@ -16,6 +16,7 @@ def draw_in_hud(self):
     lives_icon = self.lives_icon
     lives = self.lives
     score = self.score
+    time = self.time
 
     # We apply the fill again so it re-draws all the surface, preventing text overlap.
     self.image.fill((239, 217, 11, 180))
@@ -26,6 +27,7 @@ def draw_in_hud(self):
         {'text': 'Level 1: Rave à Paris', 'font': font, 'pos': (inner_rect.centerx, inner_rect.centery)},
         {'text': f'X{lives}', 'font': font, 'pos': (inner_rect.left + 80, inner_rect.centery - 20)},
         {'text': f'SCORE: {score}', 'font': font, 'pos': (inner_rect.left + 80, inner_rect.centery + 10)},
+        {'text': f'TIME: {time}', 'font': font, 'pos': (inner_rect.right - 80, inner_rect.centery + 10)},
     ]
 
     for item in hud_elements:
@@ -47,12 +49,13 @@ def update_score(self, hud_elements, new_score):
     hud_surface.blit(txt_score, txt_rect)
 
 class HUD(pg.sprite.Sprite):
-    def __init__(self, screen, player, score, lives):
+    def __init__(self, screen, player, score, lives, time):
         super().__init__()
         self.screen = screen
         self.player = player
         self.score = score
         self.lives = lives
+        self.time = time
 
         self.font = pg.font.Font(pixel_font_path, 25)
         self.font_lg = pg.font.Font(pixel_font_path, 35)
@@ -62,7 +65,7 @@ class HUD(pg.sprite.Sprite):
         self.rect = self.image.get_rect(center=(constants.SCREEN_WIDTH / 2, 50))
         draw_in_hud(self)
 
-    def update(self, current_lives, current_score):
+    def update(self, current_lives, current_score, current_time):
 
         # Re-draw HUD ONLY if values change.
         if(self.lives != current_lives):
@@ -71,4 +74,8 @@ class HUD(pg.sprite.Sprite):
 
         elif(self.score != current_score):
             self.score = current_score            
+            draw_in_hud(self)
+        
+        elif(self.time != current_time):
+            self.time = current_time
             draw_in_hud(self)

@@ -47,6 +47,7 @@ class LevelManager():
 
         # GAME RELATED VARIABLES
         self.score = 0
+        self.time = 60
 
     def spawn_entities(self):
         for row_index, row in enumerate(self.current_tilemap):
@@ -119,9 +120,10 @@ class LevelManager():
     def level_start(self, level):
         self.spawn_entities()
         player = self.player_group.sprites()[0]
-        hud = HUD(self.screen, player, self.score, player.lives)
+        hud = HUD(self.screen, player, self.score, player.lives, self.time)
         self.hud_group.add(hud)
         evt_level_run = pg.event.Event(constants.EV_LEVEL_RUN)
+        pg.time.set_timer(constants.EV_LEVEL_TIME_PASSING, 1000)
         pg.event.post(evt_level_run)
 
         match level:
@@ -129,6 +131,10 @@ class LevelManager():
                 self.sound_manager.play_music("mus_level1")
 
     def update_level(self):
+
+        if self.time <= 0:
+            self.time = 0
+
         player = self.player_group.sprites()[0]
 
         self.screen.blit(self.current_bg, (0, 0))
@@ -140,10 +146,10 @@ class LevelManager():
         self.explosion_group.draw(self.screen)
         self.enemies_group.draw(self.screen)
         self.enemies_group.update(self.rects_map)
-        self.hud_group.update(player.lives, self.score)
+        self.hud_group.update(player.lives, self.score, self.time)
         self.hud_group.draw(self.screen)
         self.flash_player()
-
+    
         for explosion in self.explosion_group:
             if(player.rect.colliderect(explosion)):
                 if not player.invincible:
