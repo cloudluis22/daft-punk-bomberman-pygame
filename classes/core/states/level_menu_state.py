@@ -11,11 +11,19 @@ class LevelMenuState(GameState):
     def __init__(self, game: "Game"):
         self.game = game
         self.game_menu = GameMenu(game.sound_manager)
-        self.menu_state = constants.MENU_VICTORY
+        self.menu_state = constants.MENU_PAUSE
         self.quit = False
         self.option_selected = False
 
     def on_enter_state(self):
+
+        if self.game.level_manager.game_over:
+            self.menu_state = constants.MENU_GAME_OVER
+        elif self.game.level_manager.victory:
+            self.menu_state = constants.MENU_VICTORY
+        else:
+            self.menu_state = constants.MENU_PAUSE
+
         self.quit = False
         self.option_selected = False
         self.game_menu.resize_menu_window(self.menu_state)
@@ -75,8 +83,9 @@ class LevelMenuState(GameState):
     def update(self):
         if not self.option_selected:
             if self.game.input_handler.is_pressed(constants.INPUT_PAUSE):
-                self.game.sound_manager.play_sound("sfx_pause")
-                self.game.change_state(constants.STATE_GAME)
+                if not self.game.level_manager.victory and not self.game.level_manager.game_over:
+                    self.game.sound_manager.play_sound("sfx_pause")
+                    self.game.change_state(constants.STATE_GAME)
 
     def draw(self, screen):
         surface, rect = self.game_menu.draw_game_menu(self.menu_state)

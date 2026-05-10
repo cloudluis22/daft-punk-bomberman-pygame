@@ -8,7 +8,7 @@ root_path = current_path.parent.parent
 pixel_font_path = root_path / "assets" / "fonts" / "pixel_font.ttf"
 game_over_img_path = root_path / "assets" / "graphics" / "etc" / "defeat.png"
 victory_img_path = root_path / "assets" / "graphics" / "etc" / "victory.png"
-
+# FIXME: FIX BUGS
 class GameMenu():
     def __init__(self, sound_manager):
         self.height = constants.SCREEN_HEIGHT / 2   # Half size
@@ -98,7 +98,6 @@ class GameMenu():
                                                     'clickable': txt_clickable,
                                                     'index': txt_index})
 
-    
     def change_selected_index(self, new_index):
         if(new_index != self.selected_index):
             self.sound_manager.play_sound('sfx_menu_hover')

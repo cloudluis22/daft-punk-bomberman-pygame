@@ -42,11 +42,11 @@ class Game:
             constants.STATE_MENU: MenuState(self),
             constants.STATE_LVL_START: LevelStartState(self),
             constants.STATE_GAME: LevelRunningState(self),
-            constants.STATE_PAUSE: LevelMenuState(self)
+            constants.STATE_GAME_MENU: LevelMenuState(self)
         }
 
         # Initialized default with the first state.
-        self.current_state = self.game_states_dict[constants.STATE_LVL_START]
+        self.current_state = self.game_states_dict[constants.STATE_MENU]
         self.current_state.on_enter_state()
         self.events= {}
     

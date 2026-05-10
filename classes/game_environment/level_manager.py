@@ -49,6 +49,7 @@ class LevelManager():
         self.score = 0
         self.time = 60
         self.game_over = False
+        self.victory = False
 
     def spawn_entities(self):
         for row_index, row in enumerate(self.current_tilemap):
@@ -141,9 +142,6 @@ class LevelManager():
         if player.lives <= 0 or self.time <= 0:
             self.game_over = True
 
-        if self.game_over:
-            print("GAME OVER YEAHH")
-
         self.screen.blit(self.current_bg, (0, 0))
         self.screen.blit(self.map_surface, (self.offset_x, self.offset_y))
         self.player_group.update(self.bomb_group, self.explosion_group, self.rects_map)
@@ -176,6 +174,9 @@ class LevelManager():
             for bomb in self.bomb_group:
                 if bomb.rect.colliderect(enemy):
                     enemy.collision(bomb.rect)
+        
+        if len(self.enemies_group) <= 0:
+            self.victory = True
         
         enemy_deaths = pg.sprite.groupcollide(self.enemies_group, self.explosion_group, True, False)
         if enemy_deaths:

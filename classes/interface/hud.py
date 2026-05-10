@@ -19,7 +19,7 @@ def draw_in_hud(self):
     time = self.time
 
     # We apply the fill again so it re-draws all the surface, preventing text overlap.
-    self.image.fill((239, 217, 11, 180))
+    self.image.fill((200, 0, 0, 180))
 
 
     hud_elements = [
