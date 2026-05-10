@@ -11,13 +11,14 @@ class LevelMenuState(GameState):
     def __init__(self, game: "Game"):
         self.game = game
         self.game_menu = GameMenu(game.sound_manager)
+        self.menu_state = constants.MENU_VICTORY
         self.quit = False
         self.option_selected = False
 
     def on_enter_state(self):
         self.quit = False
         self.option_selected = False
-        self.game_menu.resize_menu_window(constants.MENU_PAUSE)
+        self.game_menu.resize_menu_window(self.menu_state)
       
     def handle_event(self, event):
         if event.type == pg.KEYDOWN or event.type == pg.JOYHATMOTION or  event.type == pg.JOYBUTTONDOWN:
@@ -78,5 +79,5 @@ class LevelMenuState(GameState):
                 self.game.change_state(constants.STATE_GAME)
 
     def draw(self, screen):
-        surface, rect = self.game_menu.draw_game_menu()
+        surface, rect = self.game_menu.draw_game_menu(self.menu_state)
         screen.blit(surface, rect)
