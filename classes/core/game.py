@@ -12,7 +12,7 @@ from classes.interface.transition_manager import TransitionManager
 from classes.core.states.menu_state import MenuState
 from classes.core.states.level_start_state import LevelStartState
 from classes.core.states.level_running_state import LevelRunningState
-from classes.core.states.pause_state import PauseState
+from classes.core.states.level_menu_state import LevelMenuState
 
 current_path = Path(__file__).parent
 root_path = current_path.parent.parent
@@ -42,7 +42,7 @@ class Game:
             constants.STATE_MENU: MenuState(self),
             constants.STATE_LVL_START: LevelStartState(self),
             constants.STATE_GAME: LevelRunningState(self),
-            constants.STATE_PAUSE: PauseState(self)
+            constants.STATE_PAUSE: LevelMenuState(self)
         }
 
         # Initialized default with the first state.

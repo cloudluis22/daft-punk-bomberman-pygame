@@ -28,6 +28,7 @@ class GameMenu():
 
         self.option_selected = False
 
+
         menu_elements_dict = [
             {'text': 'PAUSE', 'font': self.font_lg, 'pos': (self.inner_rect.centerx, self.inner_rect.top + 50), "clickable": False, "index": None},
             {'text': 'RESUME GAME', 'font': self.font, 'pos': (self.inner_rect.centerx, self.inner_rect.centery - 50), "clickable": True, "index":0},
@@ -48,7 +49,22 @@ class GameMenu():
                                                      'rect': txt_rect,
                                                      'clickable': txt_clickable,
                                                      'index': txt_index})
-            
+
+
+    def resize_menu_window(self, menu_state):
+        if menu_state == constants.MENU_PAUSE:
+            self.height = constants.SCREEN_HEIGHT / 2   # Half size
+            self.width = constants.SCREEN_WIDTH / 2
+
+        if menu_state == constants.MENU_VICTORY or menu_state == constants.MENU_GAME_OVER:
+            self.height = int(constants.SCREEN_HEIGHT * 0.75)   # Half size
+            self.width = int(constants.SCREEN_WIDTH * 0.75)
+
+        self.surface = pg.Surface((self.width, self.height))
+        self.surface.fill((0, 0, 0))
+        self.rect = self.surface.get_rect(center=(constants.SCREEN_WIDTH / 2, constants.SCREEN_HEIGHT / 2))
+        self.inner_rect = self.surface.get_rect() 
+
     def change_selected_index(self, new_index):
         if(new_index != self.selected_index):
             self.sound_manager.play_sound('sfx_menu_hover')
@@ -70,6 +86,7 @@ class GameMenu():
                     event = pg.event.Event(constants.EV_LEVEL_QUIT)
                     pg.event.post(event)
 
+
     # functions for increasing, decreasing menu index
     def index_inc(self):
         if(self.selected_index == None):
@@ -85,9 +102,7 @@ class GameMenu():
             if(self.selected_index > 0):
                 self.change_selected_index(self.selected_index - 1)
 
-    def draw_pause_menu(self):
-
-       # self.surface.fill((0, 0, 0, 230))
+    def draw_game_menu(self):
 
         menu_x, menu_y = self.rect.topleft
         self.mouse_pos = pg.mouse.get_pos()

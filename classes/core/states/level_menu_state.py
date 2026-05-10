@@ -7,36 +7,37 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from classes.core.game import Game
 
-class PauseState(GameState):
+class LevelMenuState(GameState):
     def __init__(self, game: "Game"):
         self.game = game
-        self.pause_menu = GameMenu(game.sound_manager)
+        self.game_menu = GameMenu(game.sound_manager)
         self.quit = False
         self.option_selected = False
 
     def on_enter_state(self):
         self.quit = False
         self.option_selected = False
+        self.game_menu.resize_menu_window(constants.MENU_PAUSE)
       
     def handle_event(self, event):
         if event.type == pg.KEYDOWN or event.type == pg.JOYHATMOTION or  event.type == pg.JOYBUTTONDOWN:
             if not self.option_selected:
                 if self.game.input_handler.is_pressed(constants.INPUT_DOWN):
-                    self.pause_menu.index_inc()
+                    self.game_menu.index_inc()
                 elif self.game.input_handler.is_pressed(constants.INPUT_UP):
-                    self.pause_menu.index_dec()
+                    self.game_menu.index_dec()
                 elif self.game.input_handler.is_pressed(constants.INPUT_SELECT):
-                    self.pause_menu.handlePauseMenuSelect()
+                    self.game_menu.handlePauseMenuSelect()
 
-            self.pause_menu.mouseMode = False
+            self.game_menu.mouseMode = False
 
         # checks if the mouse is placed in a menu option
         elif event.type == pg.MOUSEBUTTONDOWN:
-                if self.pause_menu.canClick:
-                    self.pause_menu.handlePauseMenuSelect()
+                if self.game_menu.canClick:
+                    self.game_menu.handlePauseMenuSelect()
             
         if event.type == pg.MOUSEMOTION:
-            self.pause_menu.mouseMode = True
+            self.game_menu.mouseMode = True
 
         if event.type == constants.EV_LEVEL_RESUME:
             self.game.change_state(constants.STATE_GAME)
@@ -77,5 +78,5 @@ class PauseState(GameState):
                 self.game.change_state(constants.STATE_GAME)
 
     def draw(self, screen):
-        surface, rect = self.pause_menu.draw_pause_menu()
+        surface, rect = self.game_menu.draw_game_menu()
         screen.blit(surface, rect)
